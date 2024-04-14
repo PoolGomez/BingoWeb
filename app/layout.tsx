@@ -3,10 +3,10 @@ import { inter } from '@/app/ui/fonts';
 import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: {
-    template: '%s | Alzu',
-    default: 'Acme Dashboard',
+    template: '%s | Bingo',
+    default: 'Bingo Web',
   },
-  description: 'The official Next.js Course Dashboard, built with App Router.',
+  description: 'Bingo Web by Pool Gomez',
   metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
 };
 
