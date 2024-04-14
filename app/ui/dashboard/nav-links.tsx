@@ -23,6 +23,11 @@ const links = [
     href:'/dashboard/sorteos',
     icon: BoltIcon,
   },
+  {
+    name:'Bingo',
+    href:'/dashboard/bingo',
+    icon: UserGroupIcon,
+  },
   // {
   //   name: 'Invoices',
   //   href: '/dashboard/invoices',
@@ -56,3 +61,5 @@ export default function NavLinks() {
     </>
   );
 }
+
+
