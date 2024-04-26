@@ -5,7 +5,7 @@ import { HiOutlineBanknotes } from "react-icons/hi2";
 import { PiCards } from "react-icons/pi";
 
 import { lusitana } from '@/app/ui/fonts';
-import { fetchCardsData } from '@/app/lib/data';
+import { fetchTicketsData } from '@/app/lib/data';
 
 const iconMap = {
   collected: HiOutlineBanknotes,
@@ -14,26 +14,26 @@ const iconMap = {
   invoices: PiCards,
 };
 
-export default async function CardWrapper() {
+export default async function TicketWrapper() {
   const {
-    numberOfCards,
-    numberOfCardsPaid,
-    numberOfCardsPending,
-    totalPaidCards,
-    totalPendingCards,
-    totalCards
-  } = await fetchCardsData();
+    numberOfTickets,
+    numberOfTicketsPaid,
+    numberOfTicketsPending,
+    totalPaidTickets,
+    totalPendingTickets,
+    totalTickets
+  } = await fetchTicketsData();
 
   return (
     <>
       {/* NOTE: comment in this code when you get to this point in the course */}
 
-      <Card fondo="blue-500" texto="white" color_icono='white' title="Total" value={totalCards} type="invoices" />
-      <Card fondo="green-500" texto="white" color_icono='white' title="Recolectado" value={totalPaidCards} type="collected" />
-      <Card fondo="red-500" texto="white" color_icono='white' title="Pendiente" value={totalPendingCards} type="pending" />
-      <Card fondo="blue-500" texto="white" color_icono='white' title="Total Tajetas" value={numberOfCards} type="invoices" />
-      <Card fondo="green-500" texto="white" color_icono='white' title="Tarjetas Pagadas" value={numberOfCardsPaid} type="collected" />
-      <Card fondo="red-500" texto="white" color_icono='white' title="Tarjetas Pendientes" value={numberOfCardsPending} type="pending" />
+      <Ticket fondo="blue-500" texto="white" color_icono='white' title="Total" value={totalTickets} type="invoices" />
+      <Ticket fondo="green-500" texto="white" color_icono='white' title="Recolectado" value={totalPaidTickets} type="collected" />
+      <Ticket fondo="red-500" texto="white" color_icono='white' title="Pendiente" value={totalPendingTickets} type="pending" />
+      <Ticket fondo="blue-500" texto="white" color_icono='white' title="Total Tickets" value={numberOfTickets} type="invoices" />
+      <Ticket fondo="green-500" texto="white" color_icono='white' title="Tickets Pagados" value={numberOfTicketsPaid} type="collected" />
+      <Ticket fondo="red-500" texto="white" color_icono='white' title="Tickets Pendientes" value={numberOfTicketsPending} type="pending" />
       {/* <Card
         title="Total Customers"
         value={numberOfCustomers}
@@ -43,7 +43,7 @@ export default async function CardWrapper() {
   );
 }
 
-export function Card({
+export function Ticket({
   fondo,
   texto,
   color_icono,

@@ -114,3 +114,21 @@ export type Sorteo = {
   status: 'pendiente' | 'pagado';
 };
 
+//  TICKETS
+export type TicketsTable = {
+  id: string;
+  number: string;
+  name: string;
+  amount: number;
+  description: string;
+  status: 'pendiente' | 'pagado';
+};
+export type TicketForm = {
+  id: string;
+  number: string;
+  name: string;
+  amount: number;
+  description: string;
+  status: 'pendiente' | 'pagado';
+};
+

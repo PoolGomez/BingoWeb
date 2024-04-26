@@ -6,6 +6,7 @@ import { fetchRevenue,fetchLatestInvoices, fetchCardsData } from '@/app/lib/data
 import { Suspense } from 'react';
 import { RevenueChartSkeleton ,LatestInvoicesSkeleton, CardsSkeleton,} from '@/app/ui/skeletons';
 import CardWrapper from '@/app/ui/dashboard/cards';
+import TicketWrapper from '../ui/dashboard/tickets';
 
 export default async function Page() {
   // const revenue = await fetchRevenue();
@@ -19,12 +20,14 @@ export default async function Page() {
   return (
     <main>
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        Dashboard
+        BINGOS
       </h1>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-6">
         <Suspense fallback={<CardsSkeleton />}>
           <CardWrapper />
         </Suspense>
+
+        
         {/* <Card title="Collected" value={totalPaidInvoices} type="collected" />
         <Card title="Pending" value={totalPendingInvoices} type="pending" />
         <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
@@ -47,6 +50,19 @@ export default async function Page() {
           <LatestInvoices />
         </Suspense> */}
       </div>
+
+      <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+        TICKETS
+      </h1>
+      <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-6">
+        <Suspense fallback={<CardsSkeleton />}>
+          <TicketWrapper />
+        </Suspense>
+
+        
+        
+      </div>
+
     </main>
   );
 }

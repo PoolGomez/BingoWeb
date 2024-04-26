@@ -5,6 +5,7 @@ const {
   revenue,
   users,
   cards,
+  tickets,
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
@@ -202,6 +203,47 @@ async function seedCards(client) {
   }
 }
 
+async function seedTickets(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    // Create the "cards" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS tickets (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        number VARCHAR(8) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        amount INT NOT NULL,
+        description VARCHAR(255) NULL,
+        status VARCHAR(50) NOT NULL
+      );
+    `;
+
+    console.log(`Created "tickets" table`);
+
+    // Insert data into the "tickets" table
+    const insertedTickets = await Promise.all(
+      tickets.map(
+        (ticket) => client.sql`
+        INSERT INTO tickets (number, name, amount, description, status)
+        VALUES (${ticket.number},${ticket.name}, ${ticket.amount},${ticket.description}, ${ticket.status})
+        ON CONFLICT (id) DO NOTHING;
+      `,
+      ),
+    );
+
+    console.log(`Seeded ${insertedTickets.length} tickets`);
+
+    return {
+      createTable,
+      cards: insertedTickets,
+    };
+  } catch (error) {
+    console.error('Error seeding tickets:', error);
+    throw error;
+  }
+}
+
 async function main() {
   const client = await db.connect();
 
@@ -209,7 +251,8 @@ async function main() {
   // await seedCustomers(client);
   // await seedInvoices(client);
   // await seedRevenue(client);
-  await seedCards(client);
+  // await seedCards(client);
+  await seedTickets(client);
   await client.end();
 }
 

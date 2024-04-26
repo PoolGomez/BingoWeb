@@ -1,10 +1,11 @@
 'use client';
-import {
-  UserGroupIcon,
-  HomeIcon,
-  DocumentDuplicateIcon,
-  BoltIcon,
-} from '@heroicons/react/24/outline';
+import { FaHome } from "react-icons/fa";
+import { HiOutlineDocumentDuplicate } from "react-icons/hi2";
+import { MdOutlineBolt } from "react-icons/md";
+import { IoTicketOutline } from "react-icons/io5";
+
+import { HiOutlineUserGroup } from "react-icons/hi2";
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
@@ -12,28 +13,29 @@ import clsx from 'clsx';
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
+  { name: 'Home', href: '/dashboard', icon: FaHome },
   {
     name:'Tarjetas',
     href:'/dashboard/cards',
-    icon: DocumentDuplicateIcon,
+    icon: HiOutlineDocumentDuplicate,
+  },
+  {
+    name:'Tickets',
+    href:'/dashboard/tickets',
+    icon: IoTicketOutline,
   },
   {
     name:'Sorteos',
     href:'/dashboard/sorteos',
-    icon: BoltIcon,
+    icon: MdOutlineBolt,
   },
   {
     name:'Bingo',
     href:'/dashboard/bingo',
-    icon: UserGroupIcon,
+    icon: HiOutlineUserGroup,
   },
-  // {
-  //   name: 'Invoices',
-  //   href: '/dashboard/invoices',
-  //   icon: DocumentDuplicateIcon,
-  // },
-  // { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  
+  
 ];
 
 export default function NavLinks() {

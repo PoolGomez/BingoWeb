@@ -1,4 +1,5 @@
-import { CheckIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { FaCheck } from "react-icons/fa";
+import { FaRegClock } from "react-icons/fa";
 import clsx from 'clsx';
 
 export default function InvoiceStatus({ status }: { status: string }) {
@@ -15,13 +16,13 @@ export default function InvoiceStatus({ status }: { status: string }) {
       {status === 'pending' ? (
         <>
           Pending
-          <ClockIcon className="ml-1 w-4 text-gray-500" />
+          <FaRegClock className="ml-1 w-4 text-gray-500" />
         </>
       ) : null}
       {status === 'paid' ? (
         <>
           Paid
-          <CheckIcon className="ml-1 w-4 text-white" />
+          <FaCheck className="ml-1 w-4 text-white" />
         </>
       ) : null}
     </span>

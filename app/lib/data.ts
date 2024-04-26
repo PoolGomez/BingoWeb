@@ -10,6 +10,8 @@ import {
   CardsTable,
   CardForm,
   Sorteo,
+  TicketsTable,
+  TicketForm,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -144,6 +146,7 @@ export async function fetchCardsData() {
     // const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
     const totalPaidCards = formatCurrency(data[3].rows[0].pagado ?? '0');
     const totalPendingCards = formatCurrency(data[3].rows[0].pendiente ?? '0');
+    const totalCards = formatCurrency(Number(data[3].rows[0].pendiente ?? '0') + Number(data[3].rows[0].pagado ?? '0') );
 
     return {
       numberOfCards,
@@ -151,6 +154,7 @@ export async function fetchCardsData() {
       numberOfCardsPending,
       totalPaidCards,
       totalPendingCards,
+      totalCards
     };
   } catch (error) {
     console.error('Database Error:', error);
@@ -328,7 +332,6 @@ export async function fetchCardsPages(query: string) {
     throw new Error('Failed to fetch total number of invoices.');
   }
 }
-
 export async function fetchFilteredCards(
   query: string,
   currentPage: number,
@@ -387,5 +390,130 @@ export async function fetchCardById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch card.');
+  }
+}
+
+
+//tickets
+
+export async function fetchTicketsPages(query: string) {
+  noStore();
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM tickets
+    WHERE
+      number ILIKE ${`%${query}%`} OR
+      name ILIKE ${`%${query}%`} OR
+      amount::text ILIKE ${`%${query}%`} OR
+      description ILIKE ${`%${query}%`} OR
+      status ILIKE ${`%${query}%`}
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of invoices.');
+  }
+}
+export async function fetchFilteredTickets(
+  query: string,
+  currentPage: number,
+) {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const tickets = await sql<TicketsTable>`
+      SELECT
+        id,
+        number,
+        name,
+        amount,
+        description,
+        status
+      FROM tickets
+      WHERE
+        name ILIKE ${`%${query}%`} OR
+        number ILIKE ${`%${query}%`} OR
+        amount::text ILIKE ${`%${query}%`} OR
+        description ILIKE ${`%${query}%`} OR
+        status ILIKE ${`%${query}%`}
+      ORDER BY number DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+    return tickets.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch tickets.');
+  }
+}
+export async function fetchTicketById(id: string) {
+  noStore();
+  try {
+    const data = await sql<TicketForm>`
+      SELECT
+        id,
+        number,
+        name,
+        amount,
+        description,
+        status
+      FROM tickets
+      WHERE id = ${id};
+    `;
+
+    const ticket = data.rows.map((c) => ({
+      ...c,
+      // Convert amount from cents to dollars
+      amount: c.amount / 100,
+    }));
+    // console.log(ticket); // Ticket is an empty array []
+    return ticket[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch ticket.');
+  }
+}
+export async function fetchTicketsData() {
+  noStore();
+  try {
+    // You can probably combine these into a single SQL query
+    // However, we are intentionally splitting them to demonstrate
+    // how to initialize multiple queries in parallel with JS.
+    const ticketCountPromise = sql`SELECT COUNT(*) FROM tickets`;
+    const ticketPaidCountPromise = sql`SELECT COUNT(*) FROM tickets where status = 'pagado'`;
+    const ticketPendingCountPromise = sql`SELECT COUNT(*) FROM tickets where status = 'pendiente'`;
+    const ticketStatusPromise = sql`SELECT
+         SUM(CASE WHEN status = 'pagado' THEN amount ELSE 0 END) AS "pagado",
+         SUM(CASE WHEN status = 'pendiente' THEN amount ELSE 0 END) AS "pendiente"
+         FROM tickets`;
+
+    const data = await Promise.all([
+      ticketCountPromise,
+      ticketPaidCountPromise,
+      ticketPendingCountPromise,
+      ticketStatusPromise,
+    ]);
+
+    const numberOfTickets = Number(data[0].rows[0].count ?? '0');
+    const numberOfTicketsPaid = Number(data[1].rows[0].count ?? '0');
+    const numberOfTicketsPending = Number(data[2].rows[0].count ?? '0');
+    // const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
+    const totalPaidTickets = formatCurrency(data[3].rows[0].pagado ?? '0');
+    const totalPendingTickets = formatCurrency(data[3].rows[0].pendiente ?? '0');
+    const totalTickets = formatCurrency(Number(data[3].rows[0].pendiente ?? '0') + Number(data[3].rows[0].pagado ?? '0') );
+    return {
+      numberOfTickets,
+      numberOfTicketsPaid,
+      numberOfTicketsPending,
+      totalPaidTickets,
+      totalPendingTickets,
+      totalTickets
+    };
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch ticket data.');
   }
 }

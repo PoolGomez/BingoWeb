@@ -5,25 +5,25 @@ import { FaRegTrashCan } from "react-icons/fa6";
 
 
 import Link from 'next/link';
-import { deleteCard } from '@/app/lib/actions';
+import { deleteTicket } from '@/app/lib/actions';
 import Swal from 'sweetalert2'
 
-export function CreateCard() {
+export function CreateTicket() {
   return (
     <Link
-      href="/dashboard/cards/create"
+      href="/dashboard/tickets/create"
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
-      <span className="hidden md:block">Agregar Tarjeta</span>{' '}
+      <span className="hidden md:block">Agregar Ticket</span>{' '}
       <FaPlus className="h-5 md:ml-4" />
     </Link>
   );
 }
 
-export function UpdateCard({ id }: { id: string }) {
+export function UpdateTicket({ id }: { id: string }) {
   return (
     <Link
-      href={`/dashboard/cards/${id}/edit`}
+      href={`/dashboard/tickets/${id}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <HiOutlinePencilSquare className="w-5" />
@@ -31,8 +31,8 @@ export function UpdateCard({ id }: { id: string }) {
   );
 }
 
-export function DeleteCard({ id }: { id: string }) {
-  const deleteCardWithId = deleteCard.bind(null, id);
+export function DeleteTicket({ id }: { id: string }) {
+  const deleteTicketWithId = deleteTicket.bind(null, id);
   function testdeletecat(){
     Swal.fire({
       title: "Eliminar",
@@ -52,7 +52,7 @@ export function DeleteCard({ id }: { id: string }) {
           icon: "success"
         });
         
-        deleteCardWithId();
+        deleteTicketWithId();
       }
     });
   }

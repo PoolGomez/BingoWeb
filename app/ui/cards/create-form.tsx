@@ -1,58 +1,38 @@
 'use client';
-import { CustomerField } from '@/app/lib/definitions';
 import Link from 'next/link';
-import {
-    ChatBubbleLeftIcon,
-  CheckIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
-  TagIcon,
-  TicketIcon,
-  UserCircleIcon,
-} from '@heroicons/react/24/outline';
+
+import { FaCheck } from "react-icons/fa";
+import { FaRegClock } from "react-icons/fa";
+import { GrCurrency } from "react-icons/gr";
+import { IoTicketOutline } from "react-icons/io5";
+import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
+import { GoTag } from "react-icons/go";
+
 import { Button } from '@/app/ui/button';
-import { createCard, createInvoice } from '@/app/lib/actions';
+import { createCard } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
+import { useState } from 'react';
+import TagButton from './tag-button';
 
 export default function Form() {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createCard, initialState);
+
+
+  const [inputValue, setInputValue] = useState<string>('');
+  const handleTagClick = (tagText: string) => {
+    setInputValue(tagText);
+  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+
+
   return (
     <form action={dispatch} >
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {/* Customer Name */}
-        {/* <div className="mb-4">
-          <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
-          </label>
-          <div className="relative">
-            <select
-              id="customer"
-              name="customerId"
-              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue=""
-              aria-describedby="customer-error"
-            >
-              <option value="" disabled>
-                Select a customer
-              </option>
-              {customers.map((customer) => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.name}
-                </option>
-              ))}
-            </select>
-            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-          </div>
-          <div id="customer-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.customerId &&
-              state.errors.customerId.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
-        </div> */}
+        
 
         {/* Card Number */}
         <div className="mb-4">
@@ -71,8 +51,8 @@ export default function Form() {
                 // required
                 aria-describedby="number-error"
               />
-              {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
-              <TicketIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              
+              <IoTicketOutline className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
             <div id="number-error" aria-live="polite" aria-atomic="true">
               {state.errors?.number &&
@@ -102,8 +82,8 @@ export default function Form() {
                 // required
                 aria-describedby="name-error"
               />
-              {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
-              <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              
+              <GoTag className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
             <div id="name-error" aria-live="polite" aria-atomic="true">
               {state.errors?.name &&
@@ -132,8 +112,11 @@ export default function Form() {
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 // required
                 aria-describedby="amount-error"
+
+                value={inputValue}
+                onChange={handleInputChange}
               />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <GrCurrency className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
             <div id="amount-error" aria-live="polite" aria-atomic="true">
               {state.errors?.amount &&
@@ -143,6 +126,18 @@ export default function Form() {
                   </p>
                 ))}
             </div>
+          </div>
+        </div>
+
+        <div className='flex mb-4'>
+          <div className='px-2'>
+            <TagButton tagText="S/1.50" tagValue='1.50' onClick={handleTagClick} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="S/2.00" tagValue='2.00' onClick={handleTagClick} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="S/3.00" tagValue='3.00' onClick={handleTagClick} />
           </div>
         </div>
 
@@ -163,7 +158,7 @@ export default function Form() {
                 // required
                 aria-describedby="observation-error"
               />
-              <ChatBubbleLeftIcon  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <HiOutlineChatBubbleLeftEllipsis  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
             <div id="observation-error" aria-live="polite" aria-atomic="true">
               {state.errors?.observation &&
@@ -197,7 +192,7 @@ export default function Form() {
                   htmlFor="pendiente"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pendiente <ClockIcon className="h-4 w-4" />
+                  Pendiente <FaRegClock className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
@@ -214,7 +209,7 @@ export default function Form() {
                   htmlFor="pagado"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pagado <CheckIcon className="h-4 w-4" />
+                  Pagado <FaCheck className="h-4 w-4" />
                 </label>
               </div>
 

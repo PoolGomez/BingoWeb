@@ -2,7 +2,7 @@ import { FaCheck } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa";
 import clsx from 'clsx';
 
-export default function CardStatus({ status }: { status: string }) {
+export default function TicketStatus({ status }: { status: string }) {
   return (
     <span
       className={clsx(

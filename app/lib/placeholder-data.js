@@ -204,6 +204,32 @@ const cards=[
     observation:'',
     status: 'pendiente',
   },
+];
+const tickets = [
+  {
+    id: '3958dc9e-712f-4377-85e9-fec4b6a1001a',
+    number: '00111',
+    name: 'Pool Gomez',
+    amount: 800,
+    description:'Arroz Chaufa',
+    status: 'pagado',
+  },
+  {
+    id: '3958dc9e-712f-4377-85e9-fec4b6a1002a',
+    number: '00112',
+    name: 'Miguel Gomez',
+    amount: 1200,
+    description:'Arroz con Pollo',
+    status: 'pagado',
+  },
+  {
+    id: '3958dc9e-712f-4377-85e9-fec4b6a1003a',
+    number: '00113',
+    name: 'Emilia Osorio',
+    amount: 100,
+    description:'Vaso Chicha',
+    status: 'pendiente',
+  },
 ]
 
 module.exports = {
@@ -212,4 +238,5 @@ module.exports = {
   invoices,
   revenue,
   cards,
+  tickets,
 };

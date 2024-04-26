@@ -1,6 +1,6 @@
 'use client';
 
-import { CardForm, CustomerField, InvoiceForm } from '@/app/lib/definitions';
+import { TicketForm } from '@/app/lib/definitions';
 
 import { GrCurrency } from "react-icons/gr";
 import { FaCheck } from "react-icons/fa";
@@ -12,18 +12,18 @@ import { GoTag } from "react-icons/go";
 
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateCard } from '@/app/lib/actions';
+import { updateTicket } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 
 
-export default function EditInvoiceForm({
-  card
+export default function EditTicketForm({
+  ticket
 }: {
-  card: CardForm;
+  ticket: TicketForm;
 }) {
   const initialState = { message: null, errors: {} };
-  const updateCardWithId = updateCard.bind(null, card.id);
-  const [state, dispatch] = useFormState(updateCardWithId, initialState);
+  const updateTicketWithId = updateTicket.bind(null, ticket.id);
+  const [state, dispatch] = useFormState(updateTicketWithId, initialState);
   
   return (
     <form action={dispatch}>
@@ -42,7 +42,7 @@ export default function EditInvoiceForm({
                 type="number"
                 // step="0.01"
                 placeholder="Ingrese el numero"
-                defaultValue={card.number}
+                defaultValue={ticket.number}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 // required
                 aria-describedby="number-error"
@@ -64,7 +64,7 @@ export default function EditInvoiceForm({
         {/* Card Names */}
         <div className="mb-4">
           <label htmlFor="name" className="mb-2 block text-sm font-medium">
-            Nombres
+            Nombre
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -73,8 +73,8 @@ export default function EditInvoiceForm({
                 name="name"
                 type="text"
                 // step="0.01"
-                placeholder="Ingrese los nombres"
-                defaultValue={card.name}
+                placeholder="Ingrese el nombre"
+                defaultValue={ticket.name}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 // required
                 aria-describedby="name-error"
@@ -105,8 +105,8 @@ export default function EditInvoiceForm({
                 id="amount"
                 name="amount"
                 type="number"
-                // step="0.01"
-                defaultValue={card.amount}
+                step="0.01"
+                defaultValue={ticket.amount}
                 placeholder="Enter USD amount"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
@@ -115,29 +115,29 @@ export default function EditInvoiceForm({
           </div>
         </div>
 
-        {/* Invoice Observation */}
+        {/* Invoice description */}
         <div className="mb-4">
-          <label htmlFor="observation" className="mb-2 block text-sm font-medium">
-            Observación
+          <label htmlFor="description" className="mb-2 block text-sm font-medium">
+          Descripción
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <textarea
-                id="observation"
-                name="observation"
+                id="description"
+                name="description"
                 // type="text_area"
                 // step="0.01"
-                placeholder="Ingrese una observación"
-                defaultValue={card.observation}
+                placeholder="Ingrese una description"
+                defaultValue={ticket.description}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 // required
-                aria-describedby="observation-error"
+                aria-describedby="description-error"
               />
               <HiOutlineChatBubbleLeftEllipsis  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
-            <div id="observation-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.observation &&
-                state.errors.observation.map((error: string) => (
+            <div id="description-error" aria-live="polite" aria-atomic="true">
+              {state.errors?.description &&
+                state.errors.description.map((error: string) => (
                   <p className="mt-2 text-sm text-red-500" key={error}>
                     {error}
                   </p>
@@ -159,7 +159,7 @@ export default function EditInvoiceForm({
                   name="status"
                   type="radio"
                   value="pendiente"
-                  defaultChecked={card.status === 'pendiente'}
+                  defaultChecked={ticket.status === 'pendiente'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -175,7 +175,7 @@ export default function EditInvoiceForm({
                   name="status"
                   type="radio"
                   value="pagado"
-                  defaultChecked={card.status === 'pagado'}
+                  defaultChecked={ticket.status === 'pagado'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -194,12 +194,12 @@ export default function EditInvoiceForm({
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/cards"
+          href="/dashboard/tickets"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancelar
         </Link>
-        <Button type="submit">Editar Tarjeta</Button>
+        <Button type="submit">Editar Ticket</Button>
       </div>
     </form>
   );

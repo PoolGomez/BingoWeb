@@ -4,8 +4,9 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { signIn } from '@/auth';
+import { auth, signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
+import { authConfig } from '@/auth.config';
 
 
 const FormSchema = z.object({
@@ -130,10 +131,13 @@ export async function authenticate(
       }
       throw error;
     }
-  }
+}
+export async function logout(){
+  await signOut();
+}
 
 
-//cards
+//CARDS
 const FormSchemaCard = z.object({
   id: z.string(),
   number: z.string(),
@@ -171,6 +175,7 @@ export async function deleteCard(id: string) {
 }
 
 export async function createCard(prevState: StateCard, formData: FormData) {
+  // console.log(authConfig)
   // Validate form fields using Zod
   const validatedFields = CreateCard.safeParse({
       number: formData.get('number'),
@@ -239,4 +244,103 @@ export async function updateCard(id: string,prevState: StateCard, formData: Form
  
   revalidatePath('/dashboard/cards');
   redirect('/dashboard/cards');
+}
+
+//TICKETS
+const FormSchemaTicket = z.object({
+  id: z.string(),
+  number: z.string().min(1,{ message: "Numero es requerido"}),
+  name: z.string(),
+  amount: z.coerce.number().gt(0, { message: 'Ingrese una cantidad superior a S/0.' }),
+  description: z.string(),
+  status: z.enum(['pendiente', 'pagado'],{
+      invalid_type_error: 'Seleccione el estado del ticket.',
+  }),
+});
+const CreateTicket = FormSchemaTicket.omit({ id: true});
+const UpdateTicket = FormSchemaTicket.omit({ id: true});
+export type StateTicket = {
+  errors?: {
+    number?: string[];
+    name?: string[];
+    amount?: string[];
+    description?: string[];
+    status?: string[];
+  };
+  message?: string | null;
+};
+export async function deleteTicket(id: string) {
+  // throw new Error('Failed to Delete Ticket');
+  try {
+      await sql`DELETE FROM tickets WHERE id = ${id}`;
+      revalidatePath('/dashboard/tickets');
+      return { message: 'Deleted Ticket' };
+  } catch (error) {
+      return { message: 'Database Error: Failed to Delete Ticket.' };
+  }  
+}
+export async function createTicket(prevState: StateTicket, formData: FormData) {
+  // Validate form fields using Zod
+  const validatedFields = CreateTicket.safeParse({
+      number: formData.get('number'),
+      name: formData.get('name'),
+      amount: formData.get('amount'),
+      description: formData.get('description'),
+      status: formData.get('status'),
+    });
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+      return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Ticket.',
+      };
+  }
+  // Prepare data for insertion into the database
+  const { number, name, amount, description, status } = validatedFields.data;
+  const amountInCents = amount * 100;
+
+  // Insert data into the database
+  try {
+      await sql`
+          INSERT INTO tickets (number, name, amount, description, status)
+          VALUES (${number}, ${name},  ${amountInCents}, ${description}, ${status})
+      `;
+  } catch (error) {
+      // If a database error occurs, return a more specific error.
+      return {
+          message: 'Database Error: Failed to Create Ticket.',
+        };
+  }
+  // Revalidate the cache for the invoices page and redirect the user.
+  revalidatePath('/dashboard/tickets');
+  redirect('/dashboard/tickets');
+}
+export async function updateTicket(id: string,prevState: StateTicket, formData: FormData) {
+  const validatedFields = UpdateTicket.safeParse({
+      number: formData.get('number'),
+      name: formData.get('name'),
+      amount: formData.get('amount'),
+      description: formData.get('description'),
+      status: formData.get('status'),
+  });
+  
+  if (!validatedFields.success) {
+  return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Update Ticket.',
+  };
+  }
+  const { number, name, amount, description, status } = validatedFields.data;
+  const amountInCents = amount * 100;
+  try {
+      await sql`
+          UPDATE tickets
+          SET number = ${number}, name = ${name}, amount = ${amountInCents}, description = ${description}, status = ${status}
+          WHERE id = ${id}
+          `;
+  } catch (error) {
+      return { message: 'Database Error: Failed to Update Ticket.' };
+  }
+  revalidatePath('/dashboard/tickets');
+  redirect('/dashboard/tickets');
 }
