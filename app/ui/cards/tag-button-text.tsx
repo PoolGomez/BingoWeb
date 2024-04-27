@@ -6,7 +6,7 @@ interface TagButtonProps {
   onClick: (tagText: string, isActive: boolean) => void;
 }
 
-const TagButtonAdd: React.FC<TagButtonProps> = ({ tagText, onClick }) => {
+const TagButtonText: React.FC<TagButtonProps> = ({ tagText, onClick }) => {
   const [isActive, setIsActive] = useState<boolean>(false);
 
   const handleClick = () => {
@@ -21,4 +21,4 @@ const TagButtonAdd: React.FC<TagButtonProps> = ({ tagText, onClick }) => {
   );
 };
 
-export default TagButtonAdd;
+export default TagButtonText;

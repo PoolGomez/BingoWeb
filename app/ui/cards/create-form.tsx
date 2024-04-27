@@ -13,12 +13,13 @@ import { createCard } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { useState } from 'react';
 import TagButton from './tag-button';
+import TagButtonText from './tag-button-text';
 
 export default function Form() {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createCard, initialState);
 
-
+  //tag-button-amount
   const [inputValue, setInputValue] = useState<string>('');
   const handleTagClick = (tagText: string) => {
     setInputValue(tagText);
@@ -28,6 +29,14 @@ export default function Form() {
   };
 
 
+  // tag-button-text
+  const [inputValueDescription, setInputValueDescription] = useState<string>('');
+  const handleTagClickDescription = (tagText: string) => {
+    setInputValueDescription(tagText);
+  };
+  const handleInputChangeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValueDescription(e.target.value);
+  };
 
   return (
     <form action={dispatch} >
@@ -148,7 +157,7 @@ export default function Form() {
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
-              <textarea
+              <input
                 id="observation"
                 name="observation"
                 // type="text_area"
@@ -157,6 +166,10 @@ export default function Form() {
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 // required
                 aria-describedby="observation-error"
+
+                value={inputValueDescription}
+                onChange={handleInputChangeDescription}
+
               />
               <HiOutlineChatBubbleLeftEllipsis  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -168,6 +181,18 @@ export default function Form() {
                   </p>
                 ))}
             </div>
+          </div>
+        </div>
+
+        <div className='flex mb-4'>
+          <div className='px-2'>
+            <TagButton tagText="Yape" tagValue='Yape' onClick={handleTagClickDescription} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="Efectivo" tagValue='Efectivo' onClick={handleTagClickDescription} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="Borrar" tagValue='' onClick={handleTagClickDescription} />
           </div>
         </div>
 

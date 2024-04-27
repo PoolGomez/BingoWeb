@@ -13,7 +13,8 @@ import { createTicket } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import TagButton from './tag-button';
 import { useState } from 'react';
-import TagButtonAdd from './tag-button-add';
+import TagButtonAdd from './tag-button-text';
+import TagButtonText from './tag-button-text';
 
 
 export default function Form() {
@@ -198,23 +199,23 @@ export default function Form() {
 
         <div className='grid grid-flow-col-dense gap-0 mb-4'>
           <div className='px-1'>
-            <TagButtonAdd tagText='+ Vaso Chicha' onClick={handleTagDescriptionClick} />
+            <TagButtonText tagText='+ Vaso Chicha' onClick={handleTagDescriptionClick} />
             {/* <TagButton tagText="Vaso Chicha" tagValue='Vaso Chicha' onClick={handleTagDescriptionClick} /> */}
           </div>
           <div className='px-1'>
-            <TagButtonAdd tagText='+ Arroz Chaufa' onClick={handleTagDescriptionClick} />
+            <TagButtonText tagText='+ Arroz Chaufa' onClick={handleTagDescriptionClick} />
             {/* <TagButton tagText="Arroz Chaufa" tagValue='Arroz Chaufa' onClick={handleTagDescriptionClick} /> */}
           </div>
           <div className='px-1'>
-            <TagButtonAdd tagText='+ Arroz con Pollo' onClick={handleTagDescriptionClick} />
+            <TagButtonText tagText='+ Arroz con Pollo' onClick={handleTagDescriptionClick} />
             {/* <TagButton tagText="Arroz con Pollo" tagValue='Arroz con Pollo' onClick={handleTagDescriptionClick} /> */}
           </div>
           <div className='px-1'>
-            <TagButtonAdd tagText='+ Tallarin con Pollo' onClick={handleTagDescriptionClick} />
+            <TagButtonText tagText='+ Tallarin con Pollo' onClick={handleTagDescriptionClick} />
             {/* <TagButton tagText="Tallarin con Pollo" tagValue='Tallarin con Pollo' onClick={handleTagDescriptionClick} /> */}
           </div>
           <div className='px-1'>
-            <TagButtonAdd tagText='+ Ceviche' onClick={handleTagDescriptionClick} />
+            <TagButtonText tagText='+ Ceviche' onClick={handleTagDescriptionClick} />
             {/* <TagButton tagText="Ceviche" tagValue='Ceviche' onClick={handleTagDescriptionClick} /> */}
           </div>
         </div>

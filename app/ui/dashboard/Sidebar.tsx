@@ -16,10 +16,11 @@ import { LiaGolfBallSolid } from "react-icons/lia";
 import DialogComponent from './DialogComponent';
 import { useSideBarDrawer } from '@/app/lib/store';
 import Logout from './logout';
+import Image from 'next/image';
 
 
 const Links = [
-    { title: "Home", icon: HiHome, url: "/" },
+    { title: "Inicio", icon: HiHome, url: "/" },
     { title: "Tarjetas", icon: FaReceipt, url: "/dashboard/cards" },
     { title: "Tickets", icon: IoTicketOutline, url: "/dashboard/tickets" },
     { title: "Sorteos", icon: GiPerspectiveDiceSixFacesRandom, url: "/dashboard/sorteos" },
@@ -36,11 +37,17 @@ const SideBar = () => {
       <div className="flex flex-col gap-y-6 px-6 pt-8">
         
           <>
-            {/* <div className="flex justify-center my-3">
-              <Link href="/" className="outline-none">
-                <Image src="/img/logo.png" width={40} height={40} alt="logo" />
+            <div className="flex justify-center my-3">
+              {/* <Link href="/" className="outline-none">
+                <Image src="/img/logo-ina.png" width={40} height={40} alt="logo" />
+              </Link> */}
+              <Link href="/">
+                <span className="flex items-center gap-3 text-black px-2 py-1">
+                  Iglesia Nueva Apostólica
+                  <Image className="" src="/img/logo-ina.png" width={40} height={40} alt="logo" />
+                </span> 
               </Link>
-            </div> */}
+            </div>
             {/* <div className="flex items-center p-3 transition-all font-semibold">
               <Image
                 src={user?.image!}
