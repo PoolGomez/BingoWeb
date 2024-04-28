@@ -170,7 +170,7 @@ async function seedCards(client) {
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS cards (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        number VARCHAR(8) NOT NULL,
+        number VARCHAR(8) UNIQUE,
         name VARCHAR(255) NOT NULL,
         amount INT NOT NULL,
         observation VARCHAR(255) NULL,
@@ -211,11 +211,12 @@ async function seedTickets(client) {
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS tickets (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        number VARCHAR(8) NOT NULL,
+        number VARCHAR(12) UNIQUE,
         name VARCHAR(255) NOT NULL,
         amount INT NOT NULL,
         description VARCHAR(255) NULL,
-        status VARCHAR(50) NOT NULL
+        status VARCHAR(50) NOT NULL,
+        status2 VARCHAR(50) NOT NULL
       );
     `;
 
@@ -225,8 +226,8 @@ async function seedTickets(client) {
     const insertedTickets = await Promise.all(
       tickets.map(
         (ticket) => client.sql`
-        INSERT INTO tickets (number, name, amount, description, status)
-        VALUES (${ticket.number},${ticket.name}, ${ticket.amount},${ticket.description}, ${ticket.status})
+        INSERT INTO tickets (number, name, amount, description, status, status2)
+        VALUES (${ticket.number},${ticket.name}, ${ticket.amount},${ticket.description}, ${ticket.status}, ${ticket.status2})
         ON CONFLICT (id) DO NOTHING;
       `,
       ),
@@ -251,8 +252,8 @@ async function main() {
   // await seedCustomers(client);
   // await seedInvoices(client);
   // await seedRevenue(client);
-  // await seedCards(client);
-  await seedTickets(client);
+  await seedCards(client);
+  // await seedTickets(client);
   await client.end();
 }
 

@@ -146,10 +146,10 @@ export default function EditTicketForm({
           </div>
         </div>
 
-        {/* Invoice Status */}
+        {/* Ticket Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Seleccione un estado
+            Estado de Pago
           </legend>
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
             <div className="flex gap-4">
@@ -166,7 +166,7 @@ export default function EditTicketForm({
                   htmlFor="pendiente"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pendiente <FaRegClock className="h-4 w-4" />
+                  PENDIENTE <FaRegClock className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
@@ -182,7 +182,53 @@ export default function EditTicketForm({
                   htmlFor="pagado"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pagado <FaCheck className="h-4 w-4" />
+                  PAGADO <FaCheck className="h-4 w-4" />
+                </label>
+              </div>
+
+              
+
+            </div>
+          </div>
+        </fieldset>
+
+        {/* Ticket Status 2 */}
+        <fieldset>
+          <legend className="mb-2 block text-sm font-medium">
+            Estado de Atención
+          </legend>
+          <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
+            <div className="flex gap-4">
+              <div className="flex items-center">
+                <input
+                  id="pendiente"
+                  name="status2"
+                  type="radio"
+                  value="pendiente"
+                  defaultChecked={ticket.status2 === 'pendiente'}
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                />
+                <label
+                  htmlFor="pendiente"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
+                >
+                  PENDIENTE <FaRegClock className="h-4 w-4" />
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  id="atendido"
+                  name="status2"
+                  type="radio"
+                  value="atendido"
+                  defaultChecked={ticket.status2 === 'atendido'}
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                />
+                <label
+                  htmlFor="atendido"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-blue-500 px-3 py-1.5 text-xs font-medium text-white"
+                >
+                  ATENDIDO <FaCheck className="h-4 w-4" />
                 </label>
               </div>
 

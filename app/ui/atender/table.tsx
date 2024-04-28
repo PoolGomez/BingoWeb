@@ -2,8 +2,10 @@ import { UpdateInvoice, DeleteInvoice } from '@/app/ui/invoices/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredTickets } from '@/app/lib/data';
-import TicketStatus from './status';
-import { DeleteTicket, UpdateTicket } from './buttons';
+
+// import { DeleteTicket, UpdateTicket } from './buttons';
+import TicketStatus from '../tickets/status';
+import { AtenderTicket } from './buttons';
 
 export default async function TicketsTable({
   query,
@@ -38,6 +40,7 @@ export default async function TicketsTable({
                     </div>
                     <p className="text-sm text-gray-500">{invoice.name}</p>
                   </div>
+                  {/* <TicketStatus status={invoice.status} /> */}
                   {/* probando */}
                   <div>
                     <div className='mb-2 flex items-center text-xs'>
@@ -56,7 +59,7 @@ export default async function TicketsTable({
                   </div>
                   
                   {/* fin prueba */}
-                  {/* <TicketStatus status={invoice.status} /> */}
+                  
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
@@ -66,8 +69,9 @@ export default async function TicketsTable({
                     <p>{invoice.description}</p>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <UpdateTicket id={invoice.id} />
-                    <DeleteTicket id={invoice.id} />
+                    <AtenderTicket id={invoice.id} />
+                    {/* <UpdateTicket id={invoice.id} />
+                    <DeleteTicket id={invoice.id} /> */}
                   </div>
                 </div>
               </div>
@@ -131,8 +135,14 @@ export default async function TicketsTable({
                   
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateTicket id={invoice.id} />
-                      <DeleteTicket id={invoice.id} />
+                      {
+                        invoice.status2 === 'pendiente' && (
+                          <AtenderTicket id={invoice.id} />
+                        )
+                      }
+                        {/* <AtenderTicket id={invoice.id} /> */}
+                        {/* <UpdateTicket id={invoice.id} />
+                        <DeleteTicket id={invoice.id} /> */}
                     </div>
                   </td>
                 </tr>

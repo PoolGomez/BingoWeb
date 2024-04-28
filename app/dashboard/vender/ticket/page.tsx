@@ -1,4 +1,4 @@
-import Form from '@/app/ui/cards/create-form';
+import Form from '@/app/ui/tickets/create-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 // import { fetchCustomers } from '@/app/lib/data';
  
@@ -9,17 +9,15 @@ export default async function Page() {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Tarjetas', href: '/dashboard/cards' },
+          { label: 'Vender', href: '/dashboard/vender' },
           {
-            label: 'Agregar Tarjeta',
-            href: '/dashboard/cards/create',
+            label: 'Agregar Ticket',
+            href: '/dashboard/vender/ticket',
             active: true,
           },
         ]}
       />
-      <Form href_cancel='/dashboard/cards' origen='create'
-    //   customers={customers} 
-      />
+      <Form href_cancel='/dashboard/vender' origen='venta'/>
     </main>
   );
 }

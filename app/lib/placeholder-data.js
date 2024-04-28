@@ -213,6 +213,7 @@ const tickets = [
     amount: 800,
     description:'Arroz Chaufa',
     status: 'pagado',
+    status2:'pendiente',
   },
   {
     id: '3958dc9e-712f-4377-85e9-fec4b6a1002a',
@@ -221,6 +222,7 @@ const tickets = [
     amount: 1200,
     description:'Arroz con Pollo',
     status: 'pagado',
+    status2:'atendido',
   },
   {
     id: '3958dc9e-712f-4377-85e9-fec4b6a1003a',
@@ -229,6 +231,7 @@ const tickets = [
     amount: 100,
     description:'Vaso Chicha',
     status: 'pendiente',
+    status2:'pendiente',
   },
 ]
 

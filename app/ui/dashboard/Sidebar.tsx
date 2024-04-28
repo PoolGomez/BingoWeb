@@ -9,29 +9,28 @@ import { MdHelp } from 'react-icons/md';
 import { IoTicketOutline } from "react-icons/io5";
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { LiaGolfBallSolid } from "react-icons/lia";
-
+import { MdOutlineSell } from "react-icons/md";
+import { CiDeliveryTruck } from "react-icons/ci";
 
 
 // import { signOut } from 'next-auth/react';
 import DialogComponent from './DialogComponent';
 import { useSideBarDrawer } from '@/app/lib/store';
 import Logout from './logout';
-import Image from 'next/image';
+import Image from 'next/image';CiDeliveryTruck
 
 
 const Links = [
     { title: "Inicio", icon: HiHome, url: "/" },
-    { title: "Tarjetas", icon: FaReceipt, url: "/dashboard/cards" },
-    { title: "Tickets", icon: IoTicketOutline, url: "/dashboard/tickets" },
+    { title: "Vender", icon: MdOutlineSell, url: "/dashboard/vender" },
+    { title: "Atender", icon: CiDeliveryTruck, url: "/dashboard/atender" },
+    { title: "Tarjetas Bingo", icon: FaReceipt, url: "/dashboard/cards" },
+    { title: "Tickets Viandas", icon: IoTicketOutline, url: "/dashboard/tickets" },
     { title: "Sorteos", icon: GiPerspectiveDiceSixFacesRandom, url: "/dashboard/sorteos" },
     { title: "Bingo", icon: LiaGolfBallSolid, url: "/dashboard/bingo" },
   ];
 const SideBar = () => {
-
-    const { isSideBarOpen, onSideBarClose } = useSideBarDrawer();
-
-    
-
+  const { isSideBarOpen, onSideBarClose } = useSideBarDrawer();
   return (
     <DialogComponent isVisible={isSideBarOpen} onClose={onSideBarClose}>
       <div className="flex flex-col gap-y-6 px-6 pt-8">

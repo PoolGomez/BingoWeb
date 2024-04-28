@@ -188,7 +188,7 @@ export async function createCard(prevState: StateCard, formData: FormData) {
   if (!validatedFields.success) {
       return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Card.',
+      message: 'Campos faltantes. No se pudo registrar la tarjeta.',
       };
   }
   // Prepare data for insertion into the database
@@ -204,13 +204,25 @@ export async function createCard(prevState: StateCard, formData: FormData) {
       `;
   } catch (error) {
       // If a database error occurs, return a more specific error.
-      return {
-          message: 'Database Error: Failed to Create Card.',
+      console.log('error create : ' + error);
+      if(error == 'NeonDbError: duplicate key value violates unique constraint "cards_number_key"'){
+        return {
+          message: 'La tarjeta con ese numero ya existe',
+        };  
+      }else{
+        return {
+          message: 'Error de base de datos: No se pudo registrar la tarjeta.',
         };
+      }
   }
   // Revalidate the cache for the invoices page and redirect the user.
-  revalidatePath('/dashboard/cards');
-  redirect('/dashboard/cards');
+  if(formData.get('origin') === 'venta'){
+    redirect('/dashboard/vender');
+  }else{
+    revalidatePath('/dashboard/cards');
+    redirect('/dashboard/cards');
+  }
+
 }
 export async function updateCard(id: string,prevState: StateCard, formData: FormData) {
   const validatedFields = UpdateCard.safeParse({
@@ -256,8 +268,12 @@ const FormSchemaTicket = z.object({
   status: z.enum(['pendiente', 'pagado'],{
       invalid_type_error: 'Seleccione el estado del ticket.',
   }),
+  status2: z.enum(['pendiente', 'atendido']),
+  // status2: z.enum(['pendiente', 'atendido'],{
+  //   invalid_type_error: 'Seleccione si ticket fue atendido.',
+  // }),
 });
-const CreateTicket = FormSchemaTicket.omit({ id: true});
+const CreateTicket = FormSchemaTicket.omit({ status2: true, id: true});
 const UpdateTicket = FormSchemaTicket.omit({ id: true});
 export type StateTicket = {
   errors?: {
@@ -266,6 +282,7 @@ export type StateTicket = {
     amount?: string[];
     description?: string[];
     status?: string[];
+    status2?: string[];
   };
   message?: string | null;
 };
@@ -279,6 +296,15 @@ export async function deleteTicket(id: string) {
       return { message: 'Database Error: Failed to Delete Ticket.' };
   }  
 }
+export async function atenderTicket(id:string){
+  try {
+    await sql`UPDATE tickets SET status2='atendido' WHERE id = ${id}`;
+    revalidatePath('/dashboard/atender');
+    return { message: 'Ticket Atendido' };
+  } catch (error) {
+      return { message: 'Database Error: Failed to Ticket Atendido.' };
+  } 
+}
 export async function createTicket(prevState: StateTicket, formData: FormData) {
   // Validate form fields using Zod
   const validatedFields = CreateTicket.safeParse({
@@ -287,12 +313,13 @@ export async function createTicket(prevState: StateTicket, formData: FormData) {
       amount: formData.get('amount'),
       description: formData.get('description'),
       status: formData.get('status'),
+      // status2: formData.get('status2'),
     });
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
       return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Ticket.',
+      message: 'Campos faltantes. No se pudo registrar el ticket.',
       };
   }
   // Prepare data for insertion into the database
@@ -302,19 +329,33 @@ export async function createTicket(prevState: StateTicket, formData: FormData) {
   // Insert data into the database
   try {
       await sql`
-          INSERT INTO tickets (number, name, amount, description, status)
-          VALUES (${number}, ${name},  ${amountInCents}, ${description}, ${status})
+          INSERT INTO tickets (number, name, amount, description, status, status2)
+          VALUES (${number}, ${name},  ${amountInCents}, ${description}, ${status}, 'pendiente')
       `;
   } catch (error) {
       // If a database error occurs, return a more specific error.
-      return {
-          message: 'Database Error: Failed to Create Ticket.',
+      // console.log('error create : ' + error);
+      if(error == 'NeonDbError: duplicate key value violates unique constraint "tickets_number_key"'){
+        return {
+          message: 'El Ticket con ese numero ya existe',
+        };  
+      }else{
+        return {
+          message: 'Error de base de datos: No se pudo registrar el ticket.',
         };
+      }
+      
   }
   // Revalidate the cache for the invoices page and redirect the user.
-  revalidatePath('/dashboard/tickets');
-  redirect('/dashboard/tickets');
+  if(formData.get('origin') === 'venta'){
+    redirect('/dashboard/vender');
+  }else{
+    revalidatePath('/dashboard/tickets');
+    redirect('/dashboard/tickets');
+  }
+  
 }
+
 export async function updateTicket(id: string,prevState: StateTicket, formData: FormData) {
   const validatedFields = UpdateTicket.safeParse({
       number: formData.get('number'),
@@ -322,6 +363,7 @@ export async function updateTicket(id: string,prevState: StateTicket, formData: 
       amount: formData.get('amount'),
       description: formData.get('description'),
       status: formData.get('status'),
+      status2: formData.get('status2'),
   });
   
   if (!validatedFields.success) {
@@ -330,12 +372,12 @@ export async function updateTicket(id: string,prevState: StateTicket, formData: 
       message: 'Missing Fields. Failed to Update Ticket.',
   };
   }
-  const { number, name, amount, description, status } = validatedFields.data;
+  const { number, name, amount, description, status, status2 } = validatedFields.data;
   const amountInCents = amount * 100;
   try {
       await sql`
           UPDATE tickets
-          SET number = ${number}, name = ${name}, amount = ${amountInCents}, description = ${description}, status = ${status}
+          SET number = ${number}, name = ${name}, amount = ${amountInCents}, description = ${description}, status = ${status}, status2 = ${status2}
           WHERE id = ${id}
           `;
   } catch (error) {

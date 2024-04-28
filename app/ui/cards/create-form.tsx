@@ -15,9 +15,10 @@ import { useState } from 'react';
 import TagButton from './tag-button';
 import TagButtonText from './tag-button-text';
 
-export default function Form() {
+export default function Form({href_cancel,origen}:{href_cancel:string, origen:string}) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createCard, initialState);
+
 
   //tag-button-amount
   const [inputValue, setInputValue] = useState<string>('');
@@ -40,6 +41,7 @@ export default function Form() {
 
   return (
     <form action={dispatch} >
+      <input type='hidden' id='origin' name='origin' value={origen} />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         
 
@@ -217,7 +219,7 @@ export default function Form() {
                   htmlFor="pendiente"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pendiente <FaRegClock className="h-4 w-4" />
+                  PENDIENTE <FaRegClock className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
@@ -234,7 +236,7 @@ export default function Form() {
                   htmlFor="pagado"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pagado <FaCheck className="h-4 w-4" />
+                  PAGADO <FaCheck className="h-4 w-4" />
                 </label>
               </div>
 
@@ -253,10 +255,19 @@ export default function Form() {
 
           </div>
         </fieldset>
+
+        {
+                  state.message &&(
+                  <p className="mt-2 text-sm text-red-500" key='sss' >
+                    {state.message}
+                  </p>
+                  )
+                }
+                
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/cards"
+          href={href_cancel}
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancelar

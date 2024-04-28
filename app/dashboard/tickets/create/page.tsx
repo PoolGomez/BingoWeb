@@ -17,7 +17,7 @@ export default async function Page() {
           },
         ]}
       />
-      <Form />
+      <Form href_cancel='/dashboard/tickets' origen='create' />
     </main>
   );
 }

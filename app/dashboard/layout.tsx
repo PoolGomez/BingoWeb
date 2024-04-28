@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Header />
       {/* <SideNav /> */}
       <SideBar />
-      <div className='flex-grow p-10'>
+      <div className='flex-grow p-2 lg:p-10'>
         {children}
       </div>
       

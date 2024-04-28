@@ -166,7 +166,7 @@ export default function EditInvoiceForm({
                   htmlFor="pendiente"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pendiente <FaRegClock className="h-4 w-4" />
+                  PENDIENTE <FaRegClock className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
@@ -182,7 +182,7 @@ export default function EditInvoiceForm({
                   htmlFor="pagado"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pagado <FaCheck className="h-4 w-4" />
+                  PAGADO <FaCheck className="h-4 w-4" />
                 </label>
               </div>
 

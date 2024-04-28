@@ -10,6 +10,7 @@ export default function TicketStatus({ status }: { status: string }) {
         {
           'bg-red-500 text-white': status === 'pendiente',
           'bg-green-500 text-white': status === 'pagado',
+          'bg-blue-500 text-white': status === 'atendido',
         },
       )}
     >
@@ -22,6 +23,12 @@ export default function TicketStatus({ status }: { status: string }) {
       {status === 'pagado' ? (
         <>
           Pagado
+          <FaCheck className="ml-1 w-4 text-white" />
+        </>
+      ) : null}
+      {status ==='atendido' ? (
+        <>
+          Atendido
           <FaCheck className="ml-1 w-4 text-white" />
         </>
       ) : null}

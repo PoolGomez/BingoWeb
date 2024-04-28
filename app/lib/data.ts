@@ -406,7 +406,8 @@ export async function fetchTicketsPages(query: string) {
       name ILIKE ${`%${query}%`} OR
       amount::text ILIKE ${`%${query}%`} OR
       description ILIKE ${`%${query}%`} OR
-      status ILIKE ${`%${query}%`}
+      status ILIKE ${`%${query}%`} OR
+      status2 ILIKE ${`%${query}%`}
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
@@ -431,14 +432,16 @@ export async function fetchFilteredTickets(
         name,
         amount,
         description,
-        status
+        status,
+        status2
       FROM tickets
       WHERE
         name ILIKE ${`%${query}%`} OR
         number ILIKE ${`%${query}%`} OR
         amount::text ILIKE ${`%${query}%`} OR
         description ILIKE ${`%${query}%`} OR
-        status ILIKE ${`%${query}%`}
+        status ILIKE ${`%${query}%`} OR
+        status2 ILIKE ${`%${query}%`}
       ORDER BY number DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
@@ -459,7 +462,8 @@ export async function fetchTicketById(id: string) {
         name,
         amount,
         description,
-        status
+        status,
+        status2
       FROM tickets
       WHERE id = ${id};
     `;

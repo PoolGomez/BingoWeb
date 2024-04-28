@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   },
   description: 'Bingo Web by Pool Gomez',
   metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
+  icons:'/img/logo-ina.png'
 };
 
 export default function RootLayout({

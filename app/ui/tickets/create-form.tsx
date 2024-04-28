@@ -9,16 +9,16 @@ import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
 import { GoTag } from "react-icons/go";
 
 import { Button } from '@/app/ui/button';
-import { createTicket } from '@/app/lib/actions';
+// import { createTicket } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import TagButton from './tag-button';
 import { useState } from 'react';
-import TagButtonAdd from './tag-button-text';
 import TagButtonText from './tag-button-text';
+import { createTicket } from '@/app/lib/actions';
 
 
-export default function Form() {
-  const initialState = { message: null, errors: {} };
+export default function Form({href_cancel, origen}:{href_cancel:string, origen:string}) {
+  const initialState = { message: null, errors: {}};
   const [state, dispatch] = useFormState(createTicket, initialState);
 
 
@@ -50,7 +50,8 @@ export default function Form() {
 
   return (
     <form action={dispatch} >
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+      <input type='hidden' id='origin' name='origin' value={origen} />
+      <div className="rounded-md bg-gray-50 p-2 md:p-6">
         {/* Card Number */}
         <div className="mb-4">
           <label htmlFor="number" className="mb-2 block text-sm font-medium">
@@ -157,7 +158,7 @@ export default function Form() {
             <TagButton tagText="S/10.00" tagValue='10.00' onClick={handleTagClick} />
           </div>
           <div className='px-2'>
-            <TagButton tagText="S/12.00" tagValue='12.00' onClick={handleTagClick} />
+            <TagButton tagText="S/15.00" tagValue='15.00' onClick={handleTagClick} />
           </div>
         </div>         
           
@@ -221,7 +222,7 @@ export default function Form() {
         </div>
 
 
-        {/* Invoice Status */}
+        {/* Ticket Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
             Elije un estado
@@ -242,7 +243,7 @@ export default function Form() {
                   htmlFor="pendiente"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pendiente <FaRegClock className="h-4 w-4" />
+                  PENDIENTE <FaRegClock className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
@@ -259,7 +260,7 @@ export default function Form() {
                   htmlFor="pagado"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Pagado <FaCheck className="h-4 w-4" />
+                  PAGADO <FaCheck className="h-4 w-4" />
                 </label>
               </div>
 
@@ -278,10 +279,25 @@ export default function Form() {
 
           </div>
         </fieldset>
+
+{/* 
+        {state.errors &&
+                state.errors.map((error: string) => ( */}
+                {
+                  state.message &&(
+                  <p className="mt-2 text-sm text-red-500" key='sss' >
+                    {state.message}
+                  </p>
+                  )
+                }
+                  
+                  {/* ))}  */}
+        
+
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/tickets"
+          href={href_cancel}
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancelar

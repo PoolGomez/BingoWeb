@@ -9,15 +9,15 @@ export default async function Page() {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Tarjetas', href: '/dashboard/cards' },
+          { label: 'Vender', href: '/dashboard/vender' },
           {
-            label: 'Agregar Tarjeta',
-            href: '/dashboard/cards/create',
+            label: 'Vender Tarjeta',
+            href: '/dashboard/vender/card',
             active: true,
           },
         ]}
       />
-      <Form href_cancel='/dashboard/cards' origen='create'
+      <Form href_cancel='/dashboard/vender' origen='venta'
     //   customers={customers} 
       />
     </main>
