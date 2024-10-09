@@ -1,5 +1,11 @@
 ## Next.js App Router Course - Starter
 
-This is the starter template for the Next.js App Router Course. It contains the starting code for the dashboard application.
+Este proyecto es una herramienta de gestion de actividades como Bingo y enta de viandas
 
-For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website.
+se puede previsualizar en [https://bingo-ina.vercel.app/](https://bingo-ina.vercel.app)
+
+<!-- For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website. -->
+
+![Imagen 1](public/images/preview/desktop_1.png)
+
+![Imagen 2](images/preview/desktop_2.png)
