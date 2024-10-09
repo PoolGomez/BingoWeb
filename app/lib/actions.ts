@@ -136,6 +136,70 @@ export async function logout(){
   await signOut();
 }
 
+//REGISTER
+const FormSchemaUser = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string(),
+  password: z.string(),
+  password2: z.string(),
+});
+const CreateUser = FormSchemaUser.omit({ id: true});
+export type StateUser = {
+  errors?:  {
+    name?: string[];
+    email?: string[];
+    password?: string[];
+    password2?: string[];
+  };
+  message?: string | null;
+}
+export async function register(prevState: StateUser, formData: FormData){
+  const validatedFields = CreateUser.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+    password: formData.get('password'),
+    password2: formData.get('password2'),
+  });
+  if(!validatedFields.success){
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Campos faltantes. No se pudo registrar'
+    }
+  }
+  const {name, email, password, password2} = validatedFields.data;
+  //validar contraseñas
+  if(password !== password2){
+    return {
+      // errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Contraseñas no coinciden'
+    }
+  }
+  
+  
+  try {
+    const bcrypt = require('bcrypt');
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await sql`
+        INSERT INTO users (name, email, password)
+        VALUES (${name},  ${email}, ${hashedPassword})
+    `;
+  } catch (error) {
+      // If a database error occurs, return a more specific error.
+      console.log('error create : ' + error);
+      if(error == 'NeonDbError: duplicate key value violates unique constraint "users_email_key"'){
+        return {
+          message: 'El correo ya existe intente con otro',
+        };  
+      }else{
+        return {
+          message: 'Error de base de datos: No se pudo registrar.',
+        };
+      }
+  }
+  redirect('/login');
+}
 
 //CARDS
 const FormSchemaCard = z.object({
@@ -148,10 +212,8 @@ const FormSchemaCard = z.object({
       invalid_type_error: 'Seleccione el estado de la tarjeta.',
   }),
 });
-
 const CreateCard = FormSchemaCard.omit({ id: true});
 const UpdateCard = FormSchemaCard.omit({ id: true});
-
 export type StateCard = {
   errors?: {
     number?: string[];
@@ -162,7 +224,6 @@ export type StateCard = {
   };
   message?: string | null;
 };
-
 export async function deleteCard(id: string) {
   // throw new Error('Failed to Delete Card');
   try {
@@ -173,7 +234,6 @@ export async function deleteCard(id: string) {
       return { message: 'Database Error: Failed to Delete Card.' };
   }  
 }
-
 export async function createCard(prevState: StateCard, formData: FormData) {
   // console.log(authConfig)
   // Validate form fields using Zod

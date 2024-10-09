@@ -6,11 +6,19 @@ import { FaBars } from "react-icons/fa";
 import { useSideBarDrawer } from "@/app/lib/store";
 import Image from "next/image";
 import Link from "next/link";
+import { getSession, signIn, useSession } from "next-auth/react";
+import AccountDropDown from "./AccountDropDown";
 
 
 const Header = () => {
 
     const {onSideBarOpen} = useSideBarDrawer()
+    const { data: session } = useSession();
+
+    
+    console.log('session:');
+    // console.log(sesion);
+    console.log(session?.user);
 
   return (
     <header className="grid grid-cols-2 py-2 px-4 md:px-12 items-center sticky top-0 z-10 bg-white border border-gray-100">
@@ -41,7 +49,7 @@ const Header = () => {
           </span>
         </Link> */}
         
-            {/* <AccountDropDown user={user} /> */}
+            <AccountDropDown email={session?.user?.email ?? 'sin email'} image={session?.user?.image ?? '/customers/balazs-orban.png'} name={session?.user?.name ?? 'no tiene nombre'} />
           
           <Link href="/">
             <span className="flex items-center gap-3 text-black px-2 py-1">
@@ -49,6 +57,7 @@ const Header = () => {
               <Image className="" src="/img/logo-ina.png" width={40} height={40} alt="logo" />
             </span> 
           </Link>
+           
            
         
         

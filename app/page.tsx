@@ -1,9 +1,11 @@
+"use client";
 import AcmeLogo from '@/app/ui/acme-logo';
 import { MdKeyboardArrowRight } from "react-icons/md";
 
 import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts';
 import Image from 'next/image';
+import { signIn, signOut } from 'next-auth/react';
 
 
 export default function Page() {
@@ -35,6 +37,20 @@ export default function Page() {
           >
             <span>Iniciar Sesión</span> <MdKeyboardArrowRight className="w-5 md:w-6" />
           </Link>
+
+          {/* <button onClick={()=> signIn()} className="bg-sky-400 px-3 py-2 rounded">
+            Login
+           </button>
+           <button
+            onClick={async () => {
+              await signOut({
+                callbackUrl: "/",
+              })
+            }}
+          >
+            Logout
+          </button> */}
+
         </div>
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
           {/* Add Hero Images Here */}
