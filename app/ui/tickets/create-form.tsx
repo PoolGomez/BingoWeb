@@ -9,10 +9,9 @@ import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
 import { GoTag } from "react-icons/go";
 
 import { Button } from '@/app/ui/button';
-// import { createTicket } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import TagButton from './tag-button';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import TagButtonText from './tag-button-text';
 import { createTicket } from '@/app/lib/actions';
 
@@ -21,6 +20,25 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
   const initialState = { message: null, errors: {}};
   const [state, dispatch] = useFormState(createTicket, initialState);
 
+  const [isPending, startTransition] = useTransition();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
+    startTransition( async()=>{
+
+      try {
+        const formData = new FormData(event.currentTarget);
+        dispatch(formData);
+      } catch (error) {
+        console.log(error)
+      }
+      
+      
+
+    })
+  }
+  
 
   const [inputValue, setInputValue] = useState<string>('');
   const handleTagClick = (tagText: string) => {
@@ -48,8 +66,19 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
   };
 
 
+  const [inputValueObservation, setInputValueObservation] = useState<string>('');
+  const handleTagClickObservation = (tagText: string) => {
+    setInputValueObservation(tagText);
+  };
+  const handleInputChangeObservation = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValueObservation(e.target.value);
+  };
+
+
   return (
-    <form action={dispatch} >
+    <form 
+    // action={dispatch}
+     onSubmit={handleSubmit} >
       <input type='hidden' id='origin' name='origin' value={origen} />
       <div className="rounded-md bg-gray-50 p-2 md:p-6">
         {/* Card Number */}
@@ -171,8 +200,8 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
-              {/* <textarea */}
-              <input
+              <textarea
+              // <input
                 id="description"
                 name="description"
                 // type="text_area"
@@ -183,7 +212,7 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
                 aria-describedby="description-error"
 
                 value={descripionInputValue}
-                onChange={handleInputChangeDescription}
+                // onChange={handleInputChangeDescription}
               />
               <HiOutlineChatBubbleLeftEllipsis  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -198,7 +227,8 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
           </div>
         </div>
 
-        <div className='grid grid-flow-col-dense gap-0 mb-4'>
+        {/* grid grid-cols-3 lg:grid-cols-1 grid-flow-col-dense gap-0 mb-4 */}
+        <div className='grid grid-cols-4 lg:grid-cols-8  gap-1 mb-4'>
           <div className='px-1'>
             <TagButtonText tagText='+ Vaso Chicha' onClick={handleTagDescriptionClick} />
             {/* <TagButton tagText="Vaso Chicha" tagValue='Vaso Chicha' onClick={handleTagDescriptionClick} /> */}
@@ -211,13 +241,67 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
             <TagButtonText tagText='+ Arroz con Pollo' onClick={handleTagDescriptionClick} />
             {/* <TagButton tagText="Arroz con Pollo" tagValue='Arroz con Pollo' onClick={handleTagDescriptionClick} /> */}
           </div>
+          
           <div className='px-1'>
-            <TagButtonText tagText='+ Tallarin con Pollo' onClick={handleTagDescriptionClick} />
-            {/* <TagButton tagText="Tallarin con Pollo" tagValue='Tallarin con Pollo' onClick={handleTagDescriptionClick} /> */}
+            <TagButtonText tagText='+ Pollo al horno' onClick={handleTagDescriptionClick} />
+            {/* <TagButton tagText="Ceviche" tagValue='Ceviche' onClick={handleTagDescriptionClick} /> */}
           </div>
           <div className='px-1'>
-            <TagButtonText tagText='+ Ceviche' onClick={handleTagDescriptionClick} />
-            {/* <TagButton tagText="Ceviche" tagValue='Ceviche' onClick={handleTagDescriptionClick} /> */}
+            <TagButtonText tagText='+ Papa Huancaina' onClick={handleTagDescriptionClick} />
+          </div>
+          <div className='px-1'>
+            <TagButtonText tagText='+ Queque' onClick={handleTagDescriptionClick} />
+          </div>
+          <div className='px-1'>
+            <TagButtonText tagText='+ Tallarin con Chanfainita' onClick={handleTagDescriptionClick} />
+            {/* <TagButton tagText="Tallarin con Pollo" tagValue='Tallarin con Pollo' onClick={handleTagDescriptionClick} /> */}
+          </div>
+        </div>
+
+
+        {/* Invoice Observation */}
+        <div className="mb-4">
+          <label htmlFor="observation" className="mb-2 block text-sm font-medium">
+            Observación
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="observation"
+                name="observation"
+                // type="text_area"
+                // step="0.01"
+                placeholder="Ingrese una observación"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                // required
+                aria-describedby="observation-error"
+
+                value={inputValueObservation}
+                onChange={handleInputChangeObservation}
+
+              />
+              <HiOutlineChatBubbleLeftEllipsis  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+            <div id="observation-error" aria-live="polite" aria-atomic="true">
+              {state.errors?.observation &&
+                state.errors.observation.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        <div className='flex mb-4'>
+          <div className='px-2'>
+            <TagButton tagText="Yape" tagValue='Yape' onClick={handleTagClickObservation} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="Efectivo" tagValue='Efectivo' onClick={handleTagClickObservation} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="Borrar" tagValue='' onClick={handleTagClickObservation} />
           </div>
         </div>
 
@@ -302,7 +386,11 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
         >
           Cancelar
         </Link>
-        <Button type="submit">Agregar Ticket</Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? (
+            "Agregando..."
+          ):("Agregar")}
+          </Button>
       </div>
     </form>
   );

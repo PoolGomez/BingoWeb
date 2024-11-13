@@ -21,7 +21,9 @@ type AccountDropDownProps = {
 }
 
 // export default function AccountDropDown({user}: AccountDropDownProps) {
-export default function AccountDropDown({email, image, name}:{email:string; image:string; name:string;} ) {
+export default function AccountDropDown(
+  // {email, image, name}:{email:string; image:string; name:string;} 
+) {
  
   return (
     <div className="">
@@ -29,7 +31,8 @@ export default function AccountDropDown({email, image, name}:{email:string; imag
         <div>
           <Menu.Button className="bg-slate-200 p-1  rounded-full text-gray-500 hover:bg-green-200 hover:text-green-600">
             <Image
-              src={image}
+              src="/customers/balazs-orban.png"
+              // src={image}
               alt="avatar"
               width={30}
               height={30}
@@ -56,13 +59,17 @@ export default function AccountDropDown({email, image, name}:{email:string; imag
               <Menu.Item>
                 <div className="flex items-center py-4 pl-3 rounded-md text-gray-500 transition-all  hover:bg-green-200 hover:text-green-600 ">
                   <Image
-                     src={image}
+                  src="/customers/balazs-orban.png"
+                    //  src={image}
                     alt="avatar"
                     width={30}
                     height={30}
                     className=" object-cover bg-white  rounded-full  dark:bg-slate-600"
                   />
-                  <span className="pl-4 ">{name} </span>
+                  <span className="pl-4 ">
+                    {/* {name}  */}
+                    usuario
+                    </span>
                 </div>
               </Menu.Item>
               <Menu.Item>

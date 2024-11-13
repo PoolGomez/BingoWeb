@@ -119,6 +119,37 @@ export async function fetchLatestInvoices() {
 //   }
 // }
 
+// CHART BAR RECAUDADO TARJETAS BINGO
+export async function fetchCardsObservationDataChartBar(){
+  noStore();
+  try {
+    const cardTotalEfectivo = sql`SELECT SUM(amount) FROM cards WHERE observation = 'Efectivo'`;
+    const cardTotalYape = sql`SELECT SUM(amount) FROM cards WHERE observation = 'Yape'`;
+    const cardPagados = sql`SELECT COUNT(*) FROM cards WHERE status = 'pagado'`;
+    const cardPendientes = sql`SELECT COUNT(*) FROM cards WHERE status = 'pendiente'`;
+    const data = await Promise.all([
+      cardTotalEfectivo,
+      cardTotalYape,
+      cardPagados,
+      cardPendientes,
+    ]);
+    const amountCardTotalEfectivo = data[0].rows[0].sum ?? 0;
+    const amountCardTotalYape = data[1].rows[0].sum ?? 0;
+    const countCardPagados = data[2].rows[0].count ?? 0;
+    const countCardPendientes = data[3].rows[0].count ?? 0;
+
+    return {
+      amountCardTotalEfectivo,
+      amountCardTotalYape,
+      countCardPagados,
+      countCardPendientes
+    }
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch fetchCardsObservationDataChartBar.');
+  }
+}
+
 export async function fetchCardsData() {
   noStore();
   try {
@@ -406,6 +437,7 @@ export async function fetchTicketsPages(query: string) {
       name ILIKE ${`%${query}%`} OR
       amount::text ILIKE ${`%${query}%`} OR
       description ILIKE ${`%${query}%`} OR
+      observation ILIKE ${`%${query}%`} OR
       status ILIKE ${`%${query}%`} OR
       status2 ILIKE ${`%${query}%`}
   `;
@@ -432,6 +464,7 @@ export async function fetchFilteredTickets(
         name,
         amount,
         description,
+        observation,
         status,
         status2
       FROM tickets
@@ -440,6 +473,7 @@ export async function fetchFilteredTickets(
         number ILIKE ${`%${query}%`} OR
         amount::text ILIKE ${`%${query}%`} OR
         description ILIKE ${`%${query}%`} OR
+        observation ILIKE ${`%${query}%`} OR
         status ILIKE ${`%${query}%`} OR
         status2 ILIKE ${`%${query}%`}
       ORDER BY number DESC
@@ -462,6 +496,7 @@ export async function fetchTicketById(id: string) {
         name,
         amount,
         description,
+        observation,
         status,
         status2
       FROM tickets
@@ -480,6 +515,36 @@ export async function fetchTicketById(id: string) {
     throw new Error('Failed to fetch ticket.');
   }
 }
+export async function fetchTicketsDataChartBar(){
+  noStore();
+  try {
+    const ticketTotalEfectivo = sql`SELECT SUM(amount) FROM tickets WHERE observation = 'Efectivo'`;
+    const ticketTotalYape = sql`SELECT SUM(amount) FROM tickets WHERE observation = 'Yape'`;
+    const ticketPagados = sql`SELECT COUNT(*) FROM tickets WHERE status = 'pagado'`;
+    const ticketPendientes = sql`SELECT COUNT(*) FROM tickets WHERE status = 'pendiente'`;
+    const data = await Promise.all([
+      ticketTotalEfectivo,
+      ticketTotalYape,
+      ticketPagados,
+      ticketPendientes,
+    ]);
+    const amountTicketTotalEfectivo = data[0].rows[0].sum ?? 0;
+    const amountTicketTotalYape = data[1].rows[0].sum ?? 0;
+    const countTicketPagados = data[2].rows[0].count ?? 0;
+    const countTicketPendientes = data[3].rows[0].count ?? 0;
+
+    return {
+      amountTicketTotalEfectivo,
+      amountTicketTotalYape,
+      countTicketPagados,
+      countTicketPendientes
+    }
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch fetchTicketsDataChartBar.');
+  }
+}
+
 export async function fetchTicketsData() {
   noStore();
   try {

@@ -28,10 +28,10 @@ export default async function TicketWrapper() {
     <>
       {/* NOTE: comment in this code when you get to this point in the course */}
 
-      <Ticket fondo="blue-500" texto="white" color_icono='white' title="Total" value={totalTickets} type="invoices" />
+      {/* <Ticket fondo="blue-500" texto="white" color_icono='white' title="Total" value={totalTickets} type="invoices" /> */}
       <Ticket fondo="green-500" texto="white" color_icono='white' title="Recolectado" value={totalPaidTickets} type="collected" />
       <Ticket fondo="red-500" texto="white" color_icono='white' title="Pendiente" value={totalPendingTickets} type="pending" />
-      <Ticket fondo="blue-500" texto="white" color_icono='white' title="Total Tickets" value={numberOfTickets} type="invoices" />
+      {/* <Ticket fondo="blue-500" texto="white" color_icono='white' title="Total Tickets" value={numberOfTickets} type="invoices" /> */}
       <Ticket fondo="green-500" texto="white" color_icono='white' title="Pagados" value={numberOfTicketsPaid} type="collected" />
       <Ticket fondo="red-500" texto="white" color_icono='white' title="Pendientes" value={numberOfTicketsPending} type="pending" />
       {/* <Card

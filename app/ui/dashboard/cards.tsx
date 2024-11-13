@@ -28,12 +28,12 @@ export default async function CardWrapper() {
     <>
       {/* NOTE: comment in this code when you get to this point in the course */}
 
-      <Card fondo="blue-500" texto="white" color_icono='white' title="Total" value={totalCards} type="invoices" />
-      <Card fondo="green-500" texto="white" color_icono='white' title="Recolectado" value={totalPaidCards} type="collected" />
-      <Card fondo="red-500" texto="white" color_icono='white' title="Pendiente" value={totalPendingCards} type="pending" />
-      <Card fondo="blue-500" texto="white" color_icono='white' title="Total Tarjetas" value={numberOfCards} type="invoices" />
-      <Card fondo="green-500" texto="white" color_icono='white' title="Pagadas" value={numberOfCardsPaid} type="collected" />
-      <Card fondo="red-500" texto="white" color_icono='white' title="Pendientes" value={numberOfCardsPending} type="pending" />
+      {/* <Card fondo="blue-500" texto="white" color_icono='white' title="Total" value={totalCards} type="invoices" /> */}
+      <Card fondo="green-500" texto="black" color_icono='black' title="Dinero Recolectado" value={totalPaidCards} type="collected" />
+      <Card fondo="red-500" texto="white" color_icono='white' title="Dinero por cobrar" value={totalPendingCards} type="pending" />
+      {/* <Card fondo="blue-500" texto="white" color_icono='white' title="Total Tarjetas" value={numberOfCards} type="invoices" /> */}
+      <Card fondo="green-500" texto="black" color_icono='black' title="Tarjetas Pagadas" value={numberOfCardsPaid} type="collected" />
+      <Card fondo="red-500" texto="white" color_icono='white' title="Tarjetas Pendientes" value={numberOfCardsPending} type="pending" />
       {/* <Card
         title="Total Customers"
         value={numberOfCustomers}

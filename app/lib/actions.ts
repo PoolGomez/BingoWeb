@@ -4,9 +4,9 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { auth, signIn, signOut } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
-import { authConfig } from '@/auth.config';
+// import { authConfig } from '@/auth.config';
 
 
 const FormSchema = z.object({
@@ -325,6 +325,7 @@ const FormSchemaTicket = z.object({
   name: z.string(),
   amount: z.coerce.number().gt(0, { message: 'Ingrese una cantidad superior a S/0.' }),
   description: z.string(),
+  observation: z.string(),
   status: z.enum(['pendiente', 'pagado'],{
       invalid_type_error: 'Seleccione el estado del ticket.',
   }),
@@ -341,6 +342,7 @@ export type StateTicket = {
     name?: string[];
     amount?: string[];
     description?: string[];
+    observation?: string[];
     status?: string[];
     status2?: string[];
   };
@@ -373,6 +375,7 @@ export async function createTicket(prevState: StateTicket, formData: FormData) {
       amount: formData.get('amount'),
       description: formData.get('description'),
       status: formData.get('status'),
+      observation: formData.get('observation'),
       // status2: formData.get('status2'),
     });
   // If form validation fails, return errors early. Otherwise, continue.
@@ -383,14 +386,14 @@ export async function createTicket(prevState: StateTicket, formData: FormData) {
       };
   }
   // Prepare data for insertion into the database
-  const { number, name, amount, description, status } = validatedFields.data;
+  const { number, name, amount, description, status, observation } = validatedFields.data;
   const amountInCents = amount * 100;
 
   // Insert data into the database
   try {
       await sql`
-          INSERT INTO tickets (number, name, amount, description, status, status2)
-          VALUES (${number}, ${name},  ${amountInCents}, ${description}, ${status}, 'pendiente')
+          INSERT INTO tickets (number, name, amount, description, observation, status, status2)
+          VALUES (${number}, ${name},  ${amountInCents}, ${description}, ${observation}, ${status}, 'pendiente')
       `;
   } catch (error) {
       // If a database error occurs, return a more specific error.
@@ -422,6 +425,7 @@ export async function updateTicket(id: string,prevState: StateTicket, formData: 
       name: formData.get('name'),
       amount: formData.get('amount'),
       description: formData.get('description'),
+      observation: formData.get('observation'),
       status: formData.get('status'),
       status2: formData.get('status2'),
   });
@@ -432,12 +436,12 @@ export async function updateTicket(id: string,prevState: StateTicket, formData: 
       message: 'Missing Fields. Failed to Update Ticket.',
   };
   }
-  const { number, name, amount, description, status, status2 } = validatedFields.data;
+  const { number, name, amount, description, observation,status, status2 } = validatedFields.data;
   const amountInCents = amount * 100;
   try {
       await sql`
           UPDATE tickets
-          SET number = ${number}, name = ${name}, amount = ${amountInCents}, description = ${description}, status = ${status}, status2 = ${status2}
+          SET number = ${number}, name = ${name}, amount = ${amountInCents}, description = ${description}, observation = ${observation}, status = ${status}, status2 = ${status2}
           WHERE id = ${id}
           `;
   } catch (error) {

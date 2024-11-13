@@ -11,7 +11,7 @@ import { GoTag } from "react-icons/go";
 import { Button } from '@/app/ui/button';
 import { createCard } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import TagButton from './tag-button';
 import TagButtonText from './tag-button-text';
 
@@ -19,6 +19,23 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createCard, initialState);
 
+  const [isPending, startTransition] = useTransition();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
+    startTransition( async()=>{
+
+      try {
+        const formData = new FormData(event.currentTarget);
+        dispatch(formData);
+      } catch (error) {
+        console.log(error)
+      }
+      
+      
+
+    })
+  }
 
   //tag-button-amount
   const [inputValue, setInputValue] = useState<string>('');
@@ -40,7 +57,10 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
   };
 
   return (
-    <form action={dispatch} >
+    <form 
+    action={dispatch} 
+    onSubmit={handleSubmit}
+    >
       <input type='hidden' id='origin' name='origin' value={origen} />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         
@@ -272,7 +292,10 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
         >
           Cancelar
         </Link>
-        <Button type="submit">Agregar Tarjeta</Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? ("Agregando..."):("Agregar")}
+          {/* Agregar Tarjeta */}
+        </Button>
       </div>
     </form>
   );

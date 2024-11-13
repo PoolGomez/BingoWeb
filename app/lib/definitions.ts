@@ -121,6 +121,7 @@ export type TicketsTable = {
   name: string;
   amount: number;
   description: string;
+  observation: string;
   status: 'pendiente' | 'pagado';
   status2: 'pendiente' | 'atendido';
 };
@@ -130,6 +131,7 @@ export type TicketForm = {
   name: string;
   amount: number;
   description: string;
+  observation: string;
   status: 'pendiente' | 'pagado';
   status2: 'pendiente' | 'atendido';
 };

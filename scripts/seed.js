@@ -215,6 +215,7 @@ async function seedTickets(client) {
         name VARCHAR(255) NOT NULL,
         amount INT NOT NULL,
         description VARCHAR(255) NULL,
+        observation VARCHAR(255) NULL,
         status VARCHAR(50) NOT NULL,
         status2 VARCHAR(50) NOT NULL
       );
@@ -226,8 +227,8 @@ async function seedTickets(client) {
     const insertedTickets = await Promise.all(
       tickets.map(
         (ticket) => client.sql`
-        INSERT INTO tickets (number, name, amount, description, status, status2)
-        VALUES (${ticket.number},${ticket.name}, ${ticket.amount},${ticket.description}, ${ticket.status}, ${ticket.status2})
+        INSERT INTO tickets (number, name, amount, description, observation, status, status2)
+        VALUES (${ticket.number},${ticket.name}, ${ticket.amount},${ticket.description}, ${ticket.observation},${ticket.status}, ${ticket.status2})
         ON CONFLICT (id) DO NOTHING;
       `,
       ),
@@ -252,8 +253,8 @@ async function main() {
   // await seedCustomers(client);
   // await seedInvoices(client);
   // await seedRevenue(client);
-  await seedCards(client);
-  // await seedTickets(client);
+  // await seedCards(client);
+  await seedTickets(client);
   await client.end();
 }
 

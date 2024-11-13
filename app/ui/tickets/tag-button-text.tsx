@@ -15,7 +15,7 @@ const TagButtonText: React.FC<TagButtonProps> = ({ tagText, onClick }) => {
   };
 
   return (
-    <button className='rounded-md border p-1 bg-gray-200 text-xs' type='button' onClick={handleClick} style={{ backgroundColor: isActive ? 'gray' : 'white', color: isActive ? 'white' : 'black' }}>
+    <button className='rounded-md border p-1 text-xs' type='button' onClick={handleClick} style={{ backgroundColor: isActive ? 'gray' : 'white', color: isActive ? 'white' : 'black' }}>
       {tagText}
     </button>
   );
