@@ -38,9 +38,13 @@ se puede previsualizar en [https://bingo-ina.vercel.app/](https://bingo-ina.verc
 
 # Desktop
 
-![Imagen 1](public/preview/desktop_1.png)
+![Imagen 1](public/preview/desktop_3.png)
 
-![Imagen 2](public/preview/desktop_2.png)
+![Imagen 2](public/preview/desktop_1.png)
+
+![Imagen 3](public/preview/desktop_2.png)
+
+
 
 # Mobile
 
