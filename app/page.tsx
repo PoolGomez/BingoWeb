@@ -5,7 +5,6 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts';
 import Image from 'next/image';
-import { signIn, signOut } from 'next-auth/react';
 
 
 export default function Page() {

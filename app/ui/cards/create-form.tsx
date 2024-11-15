@@ -10,11 +10,6 @@ import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
 import { FaCheck, FaRegClock } from "react-icons/fa";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import CreateFormIndividual from './create-form-individual';
-import CreateFormMultiple from './create-form-multiple';
-import DialogCreateForm from "./dialog-create-form";
-import Swal from "sweetalert2";
 
 export default function Form({href_cancel,origen}:{href_cancel:string, origen:string}) {
   
@@ -57,39 +52,7 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
         dispatch(formData);
       } catch (error) {
         console.log(error)
-      }finally{
-
-        
-
-
-        // if(state.message === "Se registro correctamente la tarjeta"){
-          
-        //     Swal.fire({
-        //       title: "Eliminar",
-        //       text: "¿Esta seguro que desea eliminar este elemento?",
-        //       icon: "warning",
-        //       showCancelButton: true,
-        //       confirmButtonColor: "#3085d6",
-        //       cancelButtonColor: "#d33",
-        //       confirmButtonText: "Confirmar",
-        //       cancelButtonText: "Cancelar"
-        //     }).then( (result) => {
-        //       if (result.isConfirmed) {
-                 
-        //         Swal.fire({
-        //           title: "Eliminado!",
-        //           text: "El elemento fue eliminado",
-        //           icon: "success"
-        //         });
-                
-        //         // deleteCardWithId();
-        //       }
-        //     });
-          
-        // }
       }
-      
-      
 
     })
   }
@@ -102,29 +65,17 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
   },[isPending, state.message])
 
   //tag-button-amount
-  // const [inputValue, setInputValue] = useState<string>('');
   const handleTagClick = (tagText: string) => {
-    // setInputValue(tagText);
     setFormData((prev) => ({ ...prev, amount: tagText }))
   };
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setInputValue(e.target.value);
-  // };
+ 
 
-
-  // tag-button-text
-  // const [inputValueDescription, setInputValueDescription] = useState<string>('');
   const handleTagClickDescription = (tagText: string) => {
-    // setInputValueDescription(tagText);
     setFormData((prev) => ({ ...prev, observation: tagText }))
   };
-  // const handleInputChangeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setInputValueDescription(e.target.value);
-  // };
   return (
     <form 
     id="formCreate"
-    // action={dispatch} 
     onSubmit={handleSubmit}
     >
       <input type='hidden' id='origin' name='origin' value={origen} />
@@ -385,7 +336,7 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
           Cancelar
         </Link>
         <Button type="submit" disabled={isPending}  className="text-xl">
-          {isPending ? ("Agregando..."):("Agregar")}
+          {isPending ? ("Guardando..."):("Guardar")}
           {/* Agregar Tarjeta */}
         </Button>
         <Button type="button" onClick={handleResetForm} className="text-xl">
@@ -394,18 +345,7 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
       </div>
     </form>
 
-    // <Tabs defaultValue="individual" className="w-full ">
-    //   <TabsList className="grid w-full grid-cols-2">
-    //       <TabsTrigger value="individual" className=''>Individual</TabsTrigger>
-    //       <TabsTrigger value="multiple">Multiple</TabsTrigger>
-    //   </TabsList>
-    //   <TabsContent value="individual">
-    //       <CreateFormIndividual href_cancel={href_cancel} origen={origen} />
-    //   </TabsContent>
-    //   <TabsContent value="multiple">
-    //       <CreateFormMultiple href_cancel={href_cancel} origen={origen} />
-    //   </TabsContent>
-    // </Tabs>
+  
     
   );
 }

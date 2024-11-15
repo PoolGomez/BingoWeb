@@ -3,7 +3,6 @@ import AcmeLogo from '@/app/ui/acme-logo';
 import LoginForm from '@/app/ui/login-form';
 import LoginComponent from '@/components/Common/LoginComponent';
 // import { getCurrentUser } from '../lib/session';
-import { redirect } from 'next/navigation';
  
 export default function LoginPage() {
   // if(await getCurrentUser()){
