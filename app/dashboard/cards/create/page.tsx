@@ -17,9 +17,13 @@ export default async function Page() {
           },
         ]}
       />
-      <Form href_cancel='/dashboard/cards' origen='create'
-    //   customers={customers} 
-      />
+      {/* <div className='flex items-center justify-center'> */}
+          <Form href_cancel='/dashboard/cards' origen='create'
+          //   customers={customers} 
+          />
+      {/* </div> */}
+      
+    
     </main>
   );
 }

@@ -204,7 +204,13 @@ export async function register(prevState: StateUser, formData: FormData){
 //CARDS
 const FormSchemaCard = z.object({
   id: z.string(),
-  number: z.string(),
+  number: z.string()
+    .min(1,{
+      message: 'El numero es obligatorio'
+    })
+    .max(8,{
+      message: 'Máximo 8 digitos'
+    }),
   name: z.string(),
   amount: z.coerce.number().gt(0, { message: 'Ingrese una cantidad superior a S/0.' }),
   observation: z.string(),
@@ -276,12 +282,16 @@ export async function createCard(prevState: StateCard, formData: FormData) {
       }
   }
   // Revalidate the cache for the invoices page and redirect the user.
-  if(formData.get('origin') === 'venta'){
-    redirect('/dashboard/vender');
-  }else{
+  // if(formData.get('origin') === 'venta'){
+  //   redirect('/dashboard/vender');
+  // }else{
     revalidatePath('/dashboard/cards');
-    redirect('/dashboard/cards');
-  }
+    // redirect('/dashboard/cards');
+  // }
+
+  return {
+    message: 'Se registro correctamente la tarjeta',
+  }; 
 
 }
 export async function updateCard(id: string,prevState: StateCard, formData: FormData) {

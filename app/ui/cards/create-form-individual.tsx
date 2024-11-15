@@ -1,27 +1,22 @@
-'use client';
-import Link from 'next/link';
-
-import { FaCheck } from "react-icons/fa";
-import { FaRegClock } from "react-icons/fa";
+"use client"
+import { createCard } from "@/app/lib/actions";
+import { useState, useTransition } from "react";
+import { useFormState } from "react-dom";
+import { GoTag } from "react-icons/go";
 import { GrCurrency } from "react-icons/gr";
 import { IoTicketOutline } from "react-icons/io5";
+import TagButton from "./tag-button";
 import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
-import { GoTag } from "react-icons/go";
+import { FaCheck, FaRegClock } from "react-icons/fa";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-import { Button } from '@/app/ui/button';
-import { useFormState } from 'react-dom';
-import TagButton from './tag-button';
-import { useState, useTransition } from 'react';
-import TagButtonText from './tag-button-text';
-import { createTicket } from '@/app/lib/actions';
+export default function CreateFormIndividual({href_cancel,origen}:{href_cancel:string, origen:string}) {
 
-
-export default function Form({href_cancel, origen}:{href_cancel:string, origen:string}) {
-  const initialState = { message: null, errors: {}};
-  const [state, dispatch] = useFormState(createTicket, initialState);
+    const initialState = { message: null, errors: {} };
+  const [state, dispatch] = useFormState(createCard, initialState);
 
   const [isPending, startTransition] = useTransition();
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
@@ -30,17 +25,18 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
       try {
         const formData = new FormData(event.currentTarget);
         dispatch(formData);
-       
       } catch (error) {
         console.log(error)
+      }finally{
+        
       }
       
       
 
     })
   }
-  
 
+  //tag-button-amount
   const [inputValue, setInputValue] = useState<string>('');
   const handleTagClick = (tagText: string) => {
     setInputValue(tagText);
@@ -49,39 +45,25 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
     setInputValue(e.target.value);
   };
 
-  const [descripionInputValue, descriptionSetInputValue] = useState<string>('');
-  const handleTagDescriptionClick = (tagText: string, isActive: boolean) => {
-    if(isActive){
-      // descriptionSetInputValue(descripionInputValue + tagText + '');
-      if(descripionInputValue.includes(tagText)){
-        descriptionSetInputValue(descripionInputValue.replace(tagText + ' ', ''))
-      }else{
-        descriptionSetInputValue(descripionInputValue + tagText + ' ');
-      }
-    }else{
-      descriptionSetInputValue(descripionInputValue.replace(tagText + ' ',''));
-    }
+
+  // tag-button-text
+  const [inputValueDescription, setInputValueDescription] = useState<string>('');
+  const handleTagClickDescription = (tagText: string) => {
+    setInputValueDescription(tagText);
   };
   const handleInputChangeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
-    descriptionSetInputValue(e.target.value);
+    setInputValueDescription(e.target.value);
   };
-
-
-  const [inputValueObservation, setInputValueObservation] = useState<string>('');
-  const handleTagClickObservation = (tagText: string) => {
-    setInputValueObservation(tagText);
-  };
-  const handleInputChangeObservation = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValueObservation(e.target.value);
-  };
-
 
   return (
     <form 
-    // action={dispatch}
-     onSubmit={handleSubmit} >
+    // action={dispatch} 
+    onSubmit={handleSubmit}
+    >
       <input type='hidden' id='origin' name='origin' value={origen} />
-      <div className="rounded-md bg-gray-50 p-2 md:p-6">
+      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        
+
         {/* Card Number */}
         <div className="mb-4">
           <label htmlFor="number" className="mb-2 block text-sm font-medium">
@@ -93,6 +75,7 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
                 id="number"
                 name="number"
                 type="number"
+                maxLength={2}
                 // step="0.01"
                 placeholder="Ingrese el numero"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -116,7 +99,7 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
         {/* Card Names */}
         <div className="mb-4">
           <label htmlFor="name" className="mb-2 block text-sm font-medium">
-            Nombre
+            Nombres
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -125,7 +108,7 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
                 name="name"
                 type="text"
                 // step="0.01"
-                placeholder="Ingrese el nombre"
+                placeholder="Ingrese los nombres"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 // required
                 aria-describedby="name-error"
@@ -155,7 +138,7 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
                 id="amount"
                 name="amount"
                 type="number"
-                step="0.01"
+                // step="0.01"
                 placeholder="Ingrese un monto"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 // required
@@ -179,86 +162,15 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
 
         <div className='flex mb-4'>
           <div className='px-2'>
-            <TagButton tagText="S/1.00" tagValue='1.00' onClick={handleTagClick} />
+            <TagButton tagText="S/1.50" tagValue='1.50' onClick={handleTagClick} />
           </div>
           <div className='px-2'>
-            <TagButton tagText="S/8.00" tagValue='8.00' onClick={handleTagClick} />
+            <TagButton tagText="S/2.00" tagValue='2.00' onClick={handleTagClick} />
           </div>
           <div className='px-2'>
-            <TagButton tagText="S/10.00" tagValue='10.00' onClick={handleTagClick} />
-          </div>
-          <div className='px-2'>
-            <TagButton tagText="S/15.00" tagValue='15.00' onClick={handleTagClick} />
-          </div>
-        </div>         
-          
-          {/* Agrega más botones de etiquetas según sea necesario */}
-    
-        {/* Invoice description */}
-        <div className="mb-4">
-          <label htmlFor="description" className="mb-2 block text-sm font-medium">
-            Descripción
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <textarea
-              // <input
-                id="description"
-                name="description"
-                // type="text_area"
-                // step="0.01"
-                placeholder="Ingrese una descripcion"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                // required
-                aria-describedby="description-error"
-
-                value={descripionInputValue}
-                // onChange={handleInputChangeDescription}
-              />
-              <HiOutlineChatBubbleLeftEllipsis  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-            <div id="description-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.description &&
-                state.errors.description.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
+            <TagButton tagText="S/3.00" tagValue='3.00' onClick={handleTagClick} />
           </div>
         </div>
-
-        {/* grid grid-cols-3 lg:grid-cols-1 grid-flow-col-dense gap-0 mb-4 */}
-        <div className='grid grid-cols-4 lg:grid-cols-8  gap-1 mb-4'>
-          <div className='px-1'>
-            <TagButtonText tagText='+ Vaso Chicha' onClick={handleTagDescriptionClick} />
-            {/* <TagButton tagText="Vaso Chicha" tagValue='Vaso Chicha' onClick={handleTagDescriptionClick} /> */}
-          </div>
-          <div className='px-1'>
-            <TagButtonText tagText='+ Arroz Chaufa' onClick={handleTagDescriptionClick} />
-            {/* <TagButton tagText="Arroz Chaufa" tagValue='Arroz Chaufa' onClick={handleTagDescriptionClick} /> */}
-          </div>
-          <div className='px-1'>
-            <TagButtonText tagText='+ Arroz con Pollo' onClick={handleTagDescriptionClick} />
-            {/* <TagButton tagText="Arroz con Pollo" tagValue='Arroz con Pollo' onClick={handleTagDescriptionClick} /> */}
-          </div>
-          
-          <div className='px-1'>
-            <TagButtonText tagText='+ Pollo al horno' onClick={handleTagDescriptionClick} />
-            {/* <TagButton tagText="Ceviche" tagValue='Ceviche' onClick={handleTagDescriptionClick} /> */}
-          </div>
-          <div className='px-1'>
-            <TagButtonText tagText='+ Papa Huancaina' onClick={handleTagDescriptionClick} />
-          </div>
-          <div className='px-1'>
-            <TagButtonText tagText='+ Queque' onClick={handleTagDescriptionClick} />
-          </div>
-          <div className='px-1'>
-            <TagButtonText tagText='+ Tallarin con Chanfainita' onClick={handleTagDescriptionClick} />
-            {/* <TagButton tagText="Tallarin con Pollo" tagValue='Tallarin con Pollo' onClick={handleTagDescriptionClick} /> */}
-          </div>
-        </div>
-
 
         {/* Invoice Observation */}
         <div className="mb-4">
@@ -277,8 +189,8 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
                 // required
                 aria-describedby="observation-error"
 
-                value={inputValueObservation}
-                onChange={handleInputChangeObservation}
+                value={inputValueDescription}
+                onChange={handleInputChangeDescription}
 
               />
               <HiOutlineChatBubbleLeftEllipsis  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -296,18 +208,17 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
 
         <div className='flex mb-4'>
           <div className='px-2'>
-            <TagButton tagText="Yape" tagValue='Yape' onClick={handleTagClickObservation} />
+            <TagButton tagText="Yape" tagValue='Yape' onClick={handleTagClickDescription} />
           </div>
           <div className='px-2'>
-            <TagButton tagText="Efectivo" tagValue='Efectivo' onClick={handleTagClickObservation} />
+            <TagButton tagText="Efectivo" tagValue='Efectivo' onClick={handleTagClickDescription} />
           </div>
           <div className='px-2'>
-            <TagButton tagText="Borrar" tagValue='' onClick={handleTagClickObservation} />
+            <TagButton tagText="Borrar" tagValue='' onClick={handleTagClickDescription} />
           </div>
         </div>
 
-
-        {/* Ticket Status */}
+        {/* Invoice Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
             Elije un estado
@@ -365,20 +276,14 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
           </div>
         </fieldset>
 
-{/* 
-        {state.errors &&
-                state.errors.map((error: string) => ( */}
-                {
+        {
                   state.message &&(
                   <p className="mt-2 text-sm text-red-500" key='sss' >
                     {state.message}
                   </p>
                   )
                 }
-                  
-                  {/* ))}  */}
-        
-
+                
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
@@ -388,11 +293,10 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
           Cancelar
         </Link>
         <Button type="submit" disabled={isPending}>
-          {isPending ? (
-            "Agregando..."
-          ):("Agregar")}
-          </Button>
+          {isPending ? ("Agregando..."):("Agregar")}
+          {/* Agregar Tarjeta */}
+        </Button>
       </div>
     </form>
-  );
+  )
 }

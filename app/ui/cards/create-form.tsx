@@ -1,21 +1,48 @@
 'use client';
-import Link from 'next/link';
-
-import { FaCheck } from "react-icons/fa";
-import { FaRegClock } from "react-icons/fa";
+import { createCard } from "@/app/lib/actions";
+import { useEffect, useState, useTransition } from "react";
+import { useFormState } from "react-dom";
+import { GoTag } from "react-icons/go";
 import { GrCurrency } from "react-icons/gr";
 import { IoTicketOutline } from "react-icons/io5";
+import TagButton from "./tag-button";
 import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
-import { GoTag } from "react-icons/go";
-
-import { Button } from '@/app/ui/button';
-import { createCard } from '@/app/lib/actions';
-import { useFormState } from 'react-dom';
-import { useState, useTransition } from 'react';
-import TagButton from './tag-button';
-import TagButtonText from './tag-button-text';
+import { FaCheck, FaRegClock } from "react-icons/fa";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import CreateFormIndividual from './create-form-individual';
+import CreateFormMultiple from './create-form-multiple';
+import DialogCreateForm from "./dialog-create-form";
+import Swal from "sweetalert2";
 
 export default function Form({href_cancel,origen}:{href_cancel:string, origen:string}) {
+  
+  const [formData, setFormData] = useState({
+    number: "",
+    name: "",
+    amount: "",
+    observation: "",
+    status:"",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleResetForm = () => {
+    setFormData({
+      number: "",
+      name: "",
+      amount: "",
+      observation: "",
+      status:"",
+    })
+  }
+
+  
+
+
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createCard, initialState);
 
@@ -23,45 +50,86 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
-    startTransition( async()=>{
+    startTransition(()=>{
 
       try {
         const formData = new FormData(event.currentTarget);
         dispatch(formData);
       } catch (error) {
         console.log(error)
+      }finally{
+
+        
+
+
+        // if(state.message === "Se registro correctamente la tarjeta"){
+          
+        //     Swal.fire({
+        //       title: "Eliminar",
+        //       text: "¿Esta seguro que desea eliminar este elemento?",
+        //       icon: "warning",
+        //       showCancelButton: true,
+        //       confirmButtonColor: "#3085d6",
+        //       cancelButtonColor: "#d33",
+        //       confirmButtonText: "Confirmar",
+        //       cancelButtonText: "Cancelar"
+        //     }).then( (result) => {
+        //       if (result.isConfirmed) {
+                 
+        //         Swal.fire({
+        //           title: "Eliminado!",
+        //           text: "El elemento fue eliminado",
+        //           icon: "success"
+        //         });
+                
+        //         // deleteCardWithId();
+        //       }
+        //     });
+          
+        // }
       }
       
       
 
     })
   }
+ 
+  useEffect(()=>{
+    if(isPending === false && state.message === "Se registro correctamente la tarjeta" ){
+      setFormData((prev) => ({ ...prev, number: "" }));
+    }
+
+  },[isPending, state.message])
 
   //tag-button-amount
-  const [inputValue, setInputValue] = useState<string>('');
+  // const [inputValue, setInputValue] = useState<string>('');
   const handleTagClick = (tagText: string) => {
-    setInputValue(tagText);
+    // setInputValue(tagText);
+    setFormData((prev) => ({ ...prev, amount: tagText }))
   };
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setInputValue(e.target.value);
+  // };
 
 
   // tag-button-text
-  const [inputValueDescription, setInputValueDescription] = useState<string>('');
+  // const [inputValueDescription, setInputValueDescription] = useState<string>('');
   const handleTagClickDescription = (tagText: string) => {
-    setInputValueDescription(tagText);
+    // setInputValueDescription(tagText);
+    setFormData((prev) => ({ ...prev, observation: tagText }))
   };
-  const handleInputChangeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValueDescription(e.target.value);
-  };
-
+  // const handleInputChangeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setInputValueDescription(e.target.value);
+  // };
   return (
     <form 
-    action={dispatch} 
+    id="formCreate"
+    // action={dispatch} 
     onSubmit={handleSubmit}
     >
       <input type='hidden' id='origin' name='origin' value={origen} />
+
+
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         
 
@@ -76,11 +144,15 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
                 id="number"
                 name="number"
                 type="number"
+                maxLength={2}
                 // step="0.01"
                 placeholder="Ingrese el numero"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 // required
                 aria-describedby="number-error"
+
+                value={formData.number}
+                onChange={handleChange}
               />
               
               <IoTicketOutline className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -112,6 +184,9 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 // required
                 aria-describedby="name-error"
+
+                value={formData.name}
+                onChange={handleChange}
               />
               
               <GoTag className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -144,8 +219,10 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
                 // required
                 aria-describedby="amount-error"
 
-                value={inputValue}
-                onChange={handleInputChange}
+                // value={inputValue}
+                // onChange={handleInputChange}
+                value={formData.amount}
+                onChange={handleChange}
               />
               <GrCurrency className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -189,8 +266,10 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
                 // required
                 aria-describedby="observation-error"
 
-                value={inputValueDescription}
-                onChange={handleInputChangeDescription}
+                // value={inputValueDescription}
+                // onChange={handleInputChangeDescription}
+                value={formData.observation}
+                onChange={handleChange}
 
               />
               <HiOutlineChatBubbleLeftEllipsis  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -234,6 +313,9 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   // required
                   aria-describedby="status-error"
+
+                  checked={formData.status === "pendiente"}
+                  onChange={handleChange}
                 />
                 <label
                   htmlFor="pendiente"
@@ -251,6 +333,9 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   // required
                   aria-describedby="status-error"
+
+                  checked={formData.status === "pagado"}
+                  onChange={handleChange}
                 />
                 <label
                   htmlFor="pagado"
@@ -277,26 +362,50 @@ export default function Form({href_cancel,origen}:{href_cancel:string, origen:st
         </fieldset>
 
         {
-                  state.message &&(
-                  <p className="mt-2 text-sm text-red-500" key='sss' >
+                  state.message ==="Se registro correctamente la tarjeta" ?(
+                        <p className="mt-2 text-sm text-green-500" key='sss' >
+                        {state.message}
+                      </p>
+                      )
+                    
+                  
+                  :(
+                    <p className="mt-2 text-sm text-red-500" key='sss' >
                     {state.message}
                   </p>
                   )
                 }
                 
       </div>
-      <div className="mt-6 flex justify-end gap-4">
+      <div className="mt-6 flex justify-center gap-4">
         <Link
           href={href_cancel}
-          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-xl font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancelar
         </Link>
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending}  className="text-xl">
           {isPending ? ("Agregando..."):("Agregar")}
           {/* Agregar Tarjeta */}
         </Button>
+        <Button type="button" onClick={handleResetForm} className="text-xl">
+          Nuevo
+        </Button>
       </div>
     </form>
+
+    // <Tabs defaultValue="individual" className="w-full ">
+    //   <TabsList className="grid w-full grid-cols-2">
+    //       <TabsTrigger value="individual" className=''>Individual</TabsTrigger>
+    //       <TabsTrigger value="multiple">Multiple</TabsTrigger>
+    //   </TabsList>
+    //   <TabsContent value="individual">
+    //       <CreateFormIndividual href_cancel={href_cancel} origen={origen} />
+    //   </TabsContent>
+    //   <TabsContent value="multiple">
+    //       <CreateFormMultiple href_cancel={href_cancel} origen={origen} />
+    //   </TabsContent>
+    // </Tabs>
+    
   );
 }
