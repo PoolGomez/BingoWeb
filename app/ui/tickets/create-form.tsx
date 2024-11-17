@@ -177,15 +177,27 @@ export default function Form({href_cancel, origen}:{href_cancel:string, origen:s
           </div>
         </div>
 
-        <div className='flex mb-4'>
+        <div className='grid grid-cols-4 lg:grid-cols-8 gap-1 mb-4'>
           <div className='px-2'>
             <TagButton tagText="S/1.00" tagValue='1.00' onClick={handleTagClick} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="S/1.50" tagValue='1.50' onClick={handleTagClick} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="S/2.00" tagValue='2.00' onClick={handleTagClick} />
           </div>
           <div className='px-2'>
             <TagButton tagText="S/8.00" tagValue='8.00' onClick={handleTagClick} />
           </div>
           <div className='px-2'>
             <TagButton tagText="S/10.00" tagValue='10.00' onClick={handleTagClick} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="S/12.00" tagValue='12.00' onClick={handleTagClick} />
+          </div>
+          <div className='px-2'>
+            <TagButton tagText="S/13.00" tagValue='13.00' onClick={handleTagClick} />
           </div>
           <div className='px-2'>
             <TagButton tagText="S/15.00" tagValue='15.00' onClick={handleTagClick} />
